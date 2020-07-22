@@ -8,7 +8,9 @@ public enum BookCategory implements IntegerBaseEnumInterface {
 
 	SICENCE(1, "科学"),
 
-	IT_TECHNOLOGY(2, "IT技术");
+	IT_TECHNOLOGY(2, "IT技术"),
+
+	OTHERS(100, "其他");
 
 	private BookCategory(Integer code, String label) {
 		this.code = code;

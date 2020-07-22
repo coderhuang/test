@@ -5,32 +5,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.mysql.jdbc.Driver;
-import com.querydsl.sql.Configuration;
-import com.querydsl.sql.MySQLTemplates;
-import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.codegen.MetaDataExporter;
 
+
 class QobjGenerate {
-
-	@BeforeAll
-	static void init() {
-		
-		SQLTemplates templates = MySQLTemplates.builder()
-//				.printSchema()
-				.quote()
-//				.escape('\\')
-//				.newLineToSingleSpace()
-				.build();
-		Configuration configuration = new Configuration(templates);
-//		SQLQueryFactory queryFactory = new SQLQueryFactory(configuration, dataSource);
-		
-		
-	}
-
+	
 	@Test
 	void generateQobj() throws SQLException {
 		

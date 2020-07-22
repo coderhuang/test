@@ -47,7 +47,9 @@ class ProcessTest {
 	@Test
 	void testAllProcessInfo() {
 
-		ProcessHandle.allProcesses().filter(ph -> ph.info().command().isPresent()).limit(10).forEach(ph -> {
+		var streamOfProcess = ProcessHandle.allProcesses();
+		assertNotNull(streamOfProcess);
+		streamOfProcess.filter(ph -> ph.info().command().isPresent()).limit(10).forEach(ph -> {
 
 			var processInfo = ph.info();
 			System.err.println(processInfo.command().orElse(""));
