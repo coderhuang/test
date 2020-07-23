@@ -1,7 +1,7 @@
 package toby.querydsl.listener.transaction;
 
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.event.SaveBookEvent;
@@ -10,10 +10,10 @@ import toby.querydsl.event.SaveBookEvent;
 public class BookTransactionListener {
 
 	
-	@TransactionalEventListener
+	@EventListener
 	public void obatinInsertedBook(SaveBookEvent saveBookEvent) {
 		
 		Book book = (Book) saveBookEvent.getSource();
-		System.err.println(book.getId());
+		System.err.println(book);
 	}
 }

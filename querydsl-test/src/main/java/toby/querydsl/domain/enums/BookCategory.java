@@ -9,6 +9,8 @@ public enum BookCategory implements IntegerBaseEnumInterface {
 	SICENCE(1, "科学"),
 
 	IT_TECHNOLOGY(2, "IT技术"),
+	
+	HUMANITIES(3, "人文"),
 
 	OTHERS(100, "其他");
 
