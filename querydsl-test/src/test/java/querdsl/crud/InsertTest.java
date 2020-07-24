@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,8 +28,10 @@ import com.querydsl.sql.dml.SQLInsertClause;
 
 import toby.querydsl.Application;
 import toby.querydsl.domain.entity.Book;
+import toby.querydsl.domain.entity.SkuProperty;
 import toby.querydsl.domain.enums.BookCategory;
 import toby.querydsl.domain.qobj.QBook;
+import toby.querydsl.domain.qobj.QSkuProperty;
 import toby.querydsl.event.SaveBookEvent;
 
 @ExtendWith(SpringExtension.class)
@@ -161,6 +164,25 @@ class InsertTest {
 				.executeWithKey(Long.class);
 		assertNotNull(id);
 		System.err.println(id);
+	}
+	
+	AtomicInteger ai = new AtomicInteger(0);
+	@Test
+	@DisplayName("skuProperty插入")
+	@RepeatedTest(30)
+	void insert() {
+		
+		String skuNameBase = "商品目_";
+		var skuName = skuNameBase + ai.incrementAndGet();
+		var now = LocalDateTime.now();
+		
+		var skuProperty = new SkuProperty();
+		
+		skuProperty.setCreateTime(now);
+		skuProperty.setUpdateTime(now);
+		skuProperty.setSkuName(skuName);
+		long effectCount = sqlQueryFactory.insert(QSkuProperty.skuProperty).populate(skuProperty).execute();
+		assertTrue(effectCount > 0);
 	}
 
 }
