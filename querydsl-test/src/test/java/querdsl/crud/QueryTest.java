@@ -3,7 +3,6 @@ package querdsl.crud;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +29,6 @@ class QueryTest {
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
 
-	@Autowired
-	private TransactionTemplate transactionTemplate;
-
-	
 	QBook qBook = QBook.book;
 	SQLQuery<Book> sqlQuery;
 
