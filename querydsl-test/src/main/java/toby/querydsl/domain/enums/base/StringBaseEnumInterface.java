@@ -1,5 +1,7 @@
 package toby.querydsl.domain.enums.base;
 
+import org.apache.commons.lang.ArrayUtils;
+
 public interface StringBaseEnumInterface {
 
 	/**
@@ -15,4 +17,26 @@ public interface StringBaseEnumInterface {
 	 * @return
 	 */
 	String getLabel();
+	
+	@SuppressWarnings("unchecked")
+	static <T extends StringBaseEnumInterface> T getEnum(Class<T> enumClass, Integer value) {
+
+		if (!StringBaseEnumInterface.class.isAssignableFrom(enumClass)) {
+			throw new IllegalArgumentException("参数非法");
+		}
+
+		StringBaseEnumInterface[] enumsConstants = (StringBaseEnumInterface[]) enumClass.getEnumConstants();
+		if (ArrayUtils.isEmpty(enumsConstants)) {
+			throw new IllegalArgumentException("参数非法");
+		}
+
+		for (StringBaseEnumInterface integerBaseEnumInterface : enumsConstants) {
+			
+			if (integerBaseEnumInterface.getCode().equals(value)) {
+				return (T) integerBaseEnumInterface;
+			}
+		}
+
+		throw new IllegalArgumentException("参数非法");
+	}
 }

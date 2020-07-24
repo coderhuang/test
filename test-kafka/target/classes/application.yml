@@ -1,15 +1,0 @@
-spring:
-  application:
-    name: toby-kafka-test
-  kafka:
-    bootstrap-servers:
-      - 127.0.0.1:9092
-    producer:      retries: 3
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      properties:        interceptor.classes: toby.test.kafka.producer.FirstInterceptor,toby.test.kafka.producer.SecondInterceptor
-    consumer:      auto-offset-reset: latest
-      group-id: toby.test
-      enable-auto-commit: true
-      
-  
