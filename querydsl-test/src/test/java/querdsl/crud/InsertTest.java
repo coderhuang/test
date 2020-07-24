@@ -169,20 +169,22 @@ class InsertTest {
 	AtomicInteger ai = new AtomicInteger(0);
 	@Test
 	@DisplayName("skuProperty插入")
-	@RepeatedTest(30)
 	void insert() {
 		
 		String skuNameBase = "商品目_";
-		var skuName = skuNameBase + ai.incrementAndGet();
-		var now = LocalDateTime.now();
-		
-		var skuProperty = new SkuProperty();
-		
-		skuProperty.setCreateTime(now);
-		skuProperty.setUpdateTime(now);
-		skuProperty.setSkuName(skuName);
-		long effectCount = sqlQueryFactory.insert(QSkuProperty.skuProperty).populate(skuProperty).execute();
-		assertTrue(effectCount > 0);
+		for (int i = 0; i < 30; i++) {
+			
+			var skuName = skuNameBase + ai.incrementAndGet();
+			var now = LocalDateTime.now();
+			
+			var skuProperty = new SkuProperty();
+			
+			skuProperty.setCreateTime(now);
+			skuProperty.setUpdateTime(now);
+			skuProperty.setSkuName(skuName);
+			long effectCount = sqlQueryFactory.insert(QSkuProperty.skuProperty).populate(skuProperty).execute();
+			assertTrue(effectCount > 0);
+		}
 	}
 
 }
