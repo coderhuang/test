@@ -19,7 +19,7 @@ public interface StringBaseEnumInterface {
 	String getLabel();
 	
 	@SuppressWarnings("unchecked")
-	static <T extends StringBaseEnumInterface> T getEnum(Class<T> enumClass, Integer value) {
+	static <T extends StringBaseEnumInterface> T getEnum(Class<T> enumClass, String value) {
 
 		if (!StringBaseEnumInterface.class.isAssignableFrom(enumClass)) {
 			throw new IllegalArgumentException("参数非法");
