@@ -35,6 +35,8 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath name = createString("name");
+    
+    public final NumberPath<Long> skuCode = createNumber("skuCode", Long.class);
 
     public final NumberPath<java.math.BigDecimal> price = createNumber("price", java.math.BigDecimal.class);
 
@@ -75,6 +77,7 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
         addMetadata(name, ColumnMetadata.named("name").withIndex(2).ofType(Types.VARCHAR).withSize(60).notNull());
         addMetadata(price, ColumnMetadata.named("price").withIndex(4).ofType(Types.DECIMAL).withSize(10).withDigits(5));
         addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(7).ofType(Types.TIMESTAMP).withSize(19));
+        addMetadata(skuCode, ColumnMetadata.named("sku_code").withIndex(3).ofType(Types.BIGINT).withSize(20).notNull());
     }
 
 }
