@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 
@@ -29,6 +31,9 @@ class QueryTest {
 
 	@Autowired
 	private SQLQueryFactory sqlQueryFactory;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -65,7 +70,7 @@ class QueryTest {
 
 	@Test
 	@DisplayName("给book的skuCode数据赋值")
-	void assignSkuCode2Book() {
+	void assignSkuCode2Book() throws JsonProcessingException {
 
 		QSkuProperty qSkuProperty = QSkuProperty.skuProperty;
 		var skuList = sqlQueryFactory.selectFrom(qSkuProperty).fetch();
@@ -87,5 +92,8 @@ class QueryTest {
 						.execute();
 			}
 		}
+		
+		System.err.println(objectMapper.writeValueAsString(skuList));
+		System.err.println(objectMapper.writeValueAsString(books));
 	}
 }
