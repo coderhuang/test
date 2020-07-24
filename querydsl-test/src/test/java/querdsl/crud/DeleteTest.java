@@ -2,8 +2,6 @@ package querdsl.crud;
 
 import static org.junit.Assert.assertTrue;
 
-import java.time.LocalDateTime;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,16 +12,15 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.querydsl.sql.SQLQueryFactory;
-import com.querydsl.sql.dml.SQLUpdateClause;
+import com.querydsl.sql.dml.SQLDeleteClause;
 
 import toby.querydsl.Application;
-import toby.querydsl.domain.entity.Book;
 import toby.querydsl.domain.qobj.QBook;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { Application.class })
-@DisplayName("queryDsl的更新测试")
-class UpdateTest {
+@DisplayName("queryDsl的删除测试")
+class DeleteTest {
 
 	@Autowired
 	private SQLQueryFactory sqlQueryFactory;
@@ -31,32 +28,21 @@ class UpdateTest {
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
 
-	private SQLUpdateClause sqlUpdateClause;
+	private SQLDeleteClause sqlDeleteClause;
 	private QBook qBook = QBook.book;
 
 	@BeforeEach
-	void initUpdateClause() {
+	void initDeleteClause() {
 
-		sqlUpdateClause = sqlQueryFactory.update(qBook);
-	}
-
-	@Test
-	@DisplayName("queryDsl的更新测试")
-	void updateByIdTest() {
-
-		long effctCount = sqlUpdateClause.set(qBook.updateTime, LocalDateTime.now()).where(qBook.id.eq(33L)).execute();
-		assertTrue(effctCount > 0);
+		sqlDeleteClause = sqlQueryFactory.delete(qBook);
 	}
 	
 	@Test
-	@DisplayName("queryDsl的更新populate测试")
-	void updatePopulateTest() {
+	@DisplayName("queryDsl的删除测试-byId")
+	void deleteById() {
 		
-		var book = new Book();
-		book.setId(34L);
-		book.setUpdateTime(LocalDateTime.now());
-		long effctCount = sqlUpdateClause.populate(book).where(qBook.id.eq(34L)).execute();
-		assertTrue(effctCount > 0);
+//		long effectCount = sqlDeleteClause.where(qBook.id.eq(4L).or(qBook.id.eq(14L))).execute();
+		long effectCount = sqlDeleteClause.where(qBook.id.in(24L, 34L, 44L)).execute();
+		assertTrue(effectCount > 0);
 	}
-
 }

@@ -21,7 +21,7 @@ public interface IntegerBaseEnumInterface {
 	@SuppressWarnings("unchecked")
 	static <T extends IntegerBaseEnumInterface> T getEnum(Class<T> enumClass, Integer value) {
 
-		if (!enumClass.isAssignableFrom(IntegerBaseEnumInterface.class)) {
+		if (!IntegerBaseEnumInterface.class.isAssignableFrom(enumClass)) {
 			throw new IllegalArgumentException("参数非法");
 		}
 
