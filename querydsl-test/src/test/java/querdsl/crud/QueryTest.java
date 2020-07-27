@@ -13,7 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -55,6 +57,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("queryDsl查询测试")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
 	void testQueryAndOrdering() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook);
@@ -65,6 +69,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试联表查询")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
 	void testQueryJoin() {
 
 		var sqlJoinQuery = sqlQueryFactory.select(qBook.id, qBook.name, qBook.author, qBook.skuCode, qBook.createTime,
@@ -91,10 +97,12 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试flag_bit的位操作查询")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
 	void testQueryOrder() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook)
-				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 1)
+				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 3)
 						.and(qBook.author.isNotNull()))
 				.orderBy(qBook.id.desc());
 		System.err.println(sqlQuery.getSQL().getSQL());
@@ -108,6 +116,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试groupBy的查询")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
 	void testQueryGroupingBy() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook).groupBy(qBook.name);
@@ -122,6 +132,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试子查询")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
 	void testSubQuery() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook)
@@ -155,6 +167,7 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试for update语句等的使用")
+	@Rollback(false)
 	void testForUpdate() {
 
 		transactionTemplate.execute(transactionStatus -> {
@@ -171,6 +184,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("给skuProperty的skuCode数据赋值")
+	@Transactional
+	@Rollback(false)
 	void testSssignSkucode2SkuProperty() {
 
 		QSkuProperty qSkuProperty = QSkuProperty.skuProperty;
@@ -188,6 +203,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("给book的skuCode数据赋值")
+	@Transactional
+	@Rollback(false)
 	void testAssignSkuCode2Book() throws JsonProcessingException {
 
 		QSkuProperty qSkuProperty = QSkuProperty.skuProperty;
@@ -217,6 +234,8 @@ class QueryTest {
 
 	@Test
 	@DisplayName("给book的flagBit数据赋值")
+	@Transactional
+	@Rollback(false)
 	void testAssignFlagBit2Book() throws JsonProcessingException {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook);

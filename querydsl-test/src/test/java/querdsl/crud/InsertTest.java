@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationAdapter;
@@ -61,9 +63,11 @@ class InsertTest {
 
 		var now = LocalDateTime.now();
 		var book = new Book();
-		book.setName("《江城》");
-		book.setAuthor("何伟");
-		book.setCategory(BookCategory.OTHERS);
+		book.setName("《枪炮、病菌与钢铁》");
+		book.setAuthor("贾雷德·戴蒙德");
+		book.setCategory(BookCategory.HUMANITIES);
+		book.setSkuCode(105022350334255105L);
+		book.setFlagBit(new Random().nextInt(Integer.MAX_VALUE));
 		book.setPrice(new BigDecimal("100.123"));
 		book.setCreateTime(now);
 		book.setUpdateTime(now);
@@ -74,6 +78,7 @@ class InsertTest {
 	@Test
 	@DisplayName("book数据新增测试")
 	@Transactional
+	@Rollback(false)
 	void insertBookTest() {
 
 		sqlInsertClause.set(qBook.name, "《江城》").set(qBook.author, "何伟").set(qBook.category, BookCategory.OTHERS)
@@ -84,6 +89,7 @@ class InsertTest {
 	@Test
 	@DisplayName("book数据新增测试-3")
 	@Transactional
+	@Rollback(false)
 	void insertBookTest_3() {
 
 		sqlInsertClause.set(qBook.name, "《江城》").set(qBook.author, "何伟").set(qBook.category, BookCategory.OTHERS)
@@ -96,6 +102,8 @@ class InsertTest {
 
 	@Test
 	@DisplayName("book数据新增测试-1")
+	@Rollback(false)
+	@RepeatedTest(10)
 	void insertBookTest_1() throws SQLException {
 
 		var book = initBookInfo();
@@ -156,6 +164,8 @@ class InsertTest {
 
 	@Test
 	@DisplayName("book数据新增测试-通过子查询插入")
+	@Transactional
+	@Rollback(false)
 	void insertBySubquery() {
 
 		Long id = sqlInsertClause.columns(qBook.name, qBook.author, qBook.category, qBook.price, qBook.createTime)
@@ -169,6 +179,8 @@ class InsertTest {
 	AtomicInteger ai = new AtomicInteger(0);
 	@Test
 	@DisplayName("skuProperty插入")
+	@Transactional
+	@Rollback(false)
 	void insert() {
 		
 		String skuNameBase = "商品目_";

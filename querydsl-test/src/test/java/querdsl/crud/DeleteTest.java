@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLDeleteClause;
@@ -39,6 +40,7 @@ class DeleteTest {
 	
 	@Test
 	@DisplayName("queryDsl的删除测试-byId")
+	@Transactional(rollbackFor = Exception.class)
 	void deleteById() {
 		
 //		long effectCount = sqlDeleteClause.where(qBook.id.eq(4L).or(qBook.id.eq(14L))).execute();
