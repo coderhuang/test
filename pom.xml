@@ -39,6 +39,11 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
+				<groupId>com.querydsl</groupId>
+				<artifactId>querydsl-sql-spring</artifactId>
+				<version>${querydsl.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.kafka</groupId>
 				<artifactId>kafka-clients</artifactId>
 				<version>${kafka-clients.version}</version>

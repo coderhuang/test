@@ -2,8 +2,6 @@ package toby.querydsl.domain.entity;
 
 import javax.annotation.Generated;
 
-import toby.querydsl.domain.enums.BookCategory;
-
 /**
  * Book is a Querydsl bean type
  */
@@ -12,19 +10,19 @@ public class Book {
 
 	private String author;
 
-	private BookCategory category;
+	private toby.querydsl.domain.enums.BookCategory category;
 
 	private java.time.LocalDateTime createTime;
+
+	private Integer flagBit;
 
 	private Long id;
 
 	private String name;
 
-	private Integer flagBit;
-	
-	private Long skuCode;
-
 	private java.math.BigDecimal price;
+
+	private Long skuCode;
 
 	private java.time.LocalDateTime updateTime;
 
@@ -36,11 +34,11 @@ public class Book {
 		this.author = author;
 	}
 
-	public BookCategory getCategory() {
+	public toby.querydsl.domain.enums.BookCategory getCategory() {
 		return category;
 	}
 
-	public void setCategory(BookCategory category) {
+	public void setCategory(toby.querydsl.domain.enums.BookCategory category) {
 		this.category = category;
 	}
 
@@ -50,6 +48,14 @@ public class Book {
 
 	public void setCreateTime(java.time.LocalDateTime createTime) {
 		this.createTime = createTime;
+	}
+
+	public Integer getFlagBit() {
+		return flagBit;
+	}
+
+	public void setFlagBit(Integer flagBit) {
+		this.flagBit = flagBit;
 	}
 
 	public Long getId() {
@@ -68,28 +74,12 @@ public class Book {
 		this.name = name;
 	}
 
-	public Integer getFlagBit() {
-		return flagBit;
-	}
-
-	public void setFlagBit(Integer flagBit) {
-		this.flagBit = flagBit;
-	}
-
 	public java.math.BigDecimal getPrice() {
 		return price;
 	}
 
 	public void setPrice(java.math.BigDecimal price) {
 		this.price = price;
-	}
-
-	public java.time.LocalDateTime getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(java.time.LocalDateTime updateTime) {
-		this.updateTime = updateTime;
 	}
 
 	public Long getSkuCode() {
@@ -100,11 +90,19 @@ public class Book {
 		this.skuCode = skuCode;
 	}
 
+	public java.time.LocalDateTime getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(java.time.LocalDateTime updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	@Override
 	public String toString() {
-		return "author = " + author + ", category = " + category.getLabel() + ", createTime = " + createTime + ", id = "
-				+ id + ", skuCode = " + skuCode + ", name = " + name + ", price = " + price + ", updateTime = "
-				+ updateTime + ", flagBit = " + flagBit;
+		return "author = " + author + ", category = " + category + ", createTime = " + createTime + ", flagBit = "
+				+ flagBit + ", id = " + id + ", name = " + name + ", price = " + price + ", skuCode = " + skuCode
+				+ ", updateTime = " + updateTime;
 	}
 
 }

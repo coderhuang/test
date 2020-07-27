@@ -12,9 +12,9 @@ public class SkuProperty {
 
 	private Long id;
 
-	private String skuName;
-
 	private Long skuCode;
+
+	private String skuName;
 
 	private java.time.LocalDateTime updateTime;
 
@@ -34,16 +34,16 @@ public class SkuProperty {
 		this.id = id;
 	}
 
-	public String getSkuName() {
-		return skuName;
-	}
-
 	public Long getSkuCode() {
 		return skuCode;
 	}
 
 	public void setSkuCode(Long skuCode) {
 		this.skuCode = skuCode;
+	}
+
+	public String getSkuName() {
+		return skuName;
 	}
 
 	public void setSkuName(String skuName) {

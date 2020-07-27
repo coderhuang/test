@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import com.querydsl.sql.MySQLTemplates;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
+import com.querydsl.sql.spring.SpringExceptionTranslator;
 
 import toby.querydsl.domain.enums.type.BookCategoryQueryDslType;
 
@@ -29,6 +30,7 @@ public class SqlQueryFactoryConfig {
 	public com.querydsl.sql.Configuration querFactoryConfiguration(SQLTemplates sqlTemplates) {
 
 		var configuration = new com.querydsl.sql.Configuration(sqlTemplates);
+		configuration.setExceptionTranslator(new SpringExceptionTranslator());
 		configuration.register(new BookCategoryQueryDslType());
 //		configuration.register("book", "category", new BookCategoryQueryDslType());
 

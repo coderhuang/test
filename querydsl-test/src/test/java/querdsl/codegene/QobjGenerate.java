@@ -3,17 +3,49 @@ package querdsl.codegene;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Properties;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.mysql.jdbc.Driver;
+import com.querydsl.codegen.BeanSerializer;
+import com.querydsl.sql.Configuration;
+import com.querydsl.sql.MySQLTemplates;
+import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.codegen.MetaDataExporter;
+import com.querydsl.sql.spring.SpringExceptionTranslator;
 
+import toby.querydsl.domain.enums.BookCategory;
+import toby.querydsl.domain.enums.type.BookCategoryQueryDslType;
 
+@DisplayName("queryDsl的bean和queryObj的生成类")
 class QobjGenerate {
 	
+	SQLTemplates mySqlTemplates() {
+
+		return MySQLTemplates.builder()
+//				.printSchema()
+				.quote()
+//				.escape('\\')
+//				.newLineToSingleSpace()
+				.build();
+	}
+
+	Configuration queryFactoryConfiguration() {
+
+		var configuration = new com.querydsl.sql.Configuration(mySqlTemplates());
+		configuration.setExceptionTranslator(new SpringExceptionTranslator());
+		configuration.register(new BookCategoryQueryDslType());
+		configuration.registerType("datetime", LocalDateTime.class);
+		configuration.register("book", "category", BookCategory.class);
+
+		return configuration;
+	}
+	
 	@Test
+	@DisplayName("queryDsl的bean和queryObj的生成")
 	void generateQobj() throws SQLException {
 		
 		Driver driver = new Driver();
@@ -27,6 +59,12 @@ class QobjGenerate {
 		exporter.setPackageName("toby.querydsl.domain.qobj");
 		exporter.setBeanPackageName("toby.querydsl.domain.entity");
 		exporter.setTargetFolder(new File("src/main/java"));
+		
+		var beanSerializer = new BeanSerializer();
+		beanSerializer.setAddToString(true);
+		exporter.setBeanSerializer(beanSerializer);
+		
+		exporter.setConfiguration(queryFactoryConfiguration());
 		
 		exporter.export(connection.getMetaData());
 	}

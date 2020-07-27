@@ -30,9 +30,9 @@ public class QSkuProperty extends com.querydsl.sql.RelationalPathBase<SkuPropert
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath skuName = createString("skuName");
-    
     public final NumberPath<Long> skuCode = createNumber("skuCode", Long.class);
+
+    public final StringPath skuName = createString("skuName");
 
     public final DateTimePath<java.time.LocalDateTime> updateTime = createDateTime("updateTime", java.time.LocalDateTime.class);
 
@@ -64,11 +64,11 @@ public class QSkuProperty extends com.querydsl.sql.RelationalPathBase<SkuPropert
     }
 
     public void addMetadata() {
-        addMetadata(createTime, ColumnMetadata.named("create_time").withIndex(3).ofType(Types.TIMESTAMP).withSize(19).notNull());
+        addMetadata(createTime, ColumnMetadata.named("create_time").withIndex(4).ofType(Types.TIMESTAMP).withSize(19).notNull());
         addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(20).notNull());
-        addMetadata(skuName, ColumnMetadata.named("sku_name").withIndex(2).ofType(Types.VARCHAR).withSize(30).notNull());
         addMetadata(skuCode, ColumnMetadata.named("sku_code").withIndex(3).ofType(Types.BIGINT).withSize(20).notNull());
-        addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(4).ofType(Types.TIMESTAMP).withSize(19));
+        addMetadata(skuName, ColumnMetadata.named("sku_name").withIndex(2).ofType(Types.VARCHAR).withSize(30).notNull());
+        addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(5).ofType(Types.TIMESTAMP).withSize(19));
     }
 
 }
