@@ -20,6 +20,8 @@ public class Book {
 
 	private String name;
 
+	private Integer flagBit;
+	
 	private Long skuCode;
 
 	private java.math.BigDecimal price;
@@ -66,6 +68,14 @@ public class Book {
 		this.name = name;
 	}
 
+	public Integer getFlagBit() {
+		return flagBit;
+	}
+
+	public void setFlagBit(Integer flagBit) {
+		this.flagBit = flagBit;
+	}
+
 	public java.math.BigDecimal getPrice() {
 		return price;
 	}
@@ -94,7 +104,7 @@ public class Book {
 	public String toString() {
 		return "author = " + author + ", category = " + category.getLabel() + ", createTime = " + createTime + ", id = "
 				+ id + ", skuCode = " + skuCode + ", name = " + name + ", price = " + price + ", updateTime = "
-				+ updateTime;
+				+ updateTime + ", flagBit = " + flagBit;
 	}
 
 }

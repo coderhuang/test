@@ -36,6 +36,8 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
 
     public final StringPath name = createString("name");
     
+    public final NumberPath<Integer> flagBit = createNumber("flagBit", Integer.class);
+    
     public final NumberPath<Long> skuCode = createNumber("skuCode", Long.class);
 
     public final NumberPath<java.math.BigDecimal> price = createNumber("price", java.math.BigDecimal.class);
@@ -72,12 +74,13 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
     public void addMetadata() {
         addMetadata(author, ColumnMetadata.named("author").withIndex(3).ofType(Types.VARCHAR).withSize(60).notNull());
         addMetadata(category, ColumnMetadata.named("category").withIndex(5).ofType(Types.INTEGER).withSize(7).notNull());
-        addMetadata(createTime, ColumnMetadata.named("create_time").withIndex(6).ofType(Types.TIMESTAMP).withSize(19).notNull());
+        addMetadata(createTime, ColumnMetadata.named("create_time").withIndex(8).ofType(Types.TIMESTAMP).withSize(19).notNull());
         addMetadata(id, ColumnMetadata.named("id").withIndex(1).ofType(Types.BIGINT).withSize(20).notNull());
         addMetadata(name, ColumnMetadata.named("name").withIndex(2).ofType(Types.VARCHAR).withSize(60).notNull());
         addMetadata(price, ColumnMetadata.named("price").withIndex(4).ofType(Types.DECIMAL).withSize(10).withDigits(5));
-        addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(7).ofType(Types.TIMESTAMP).withSize(19));
-        addMetadata(skuCode, ColumnMetadata.named("sku_code").withIndex(3).ofType(Types.BIGINT).withSize(20).notNull());
+        addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(9).ofType(Types.TIMESTAMP).withSize(19));
+        addMetadata(skuCode, ColumnMetadata.named("sku_code").withIndex(7).ofType(Types.BIGINT).withSize(20).notNull());
+        addMetadata(flagBit, ColumnMetadata.named("flag_bit").withIndex(6).ofType(Types.INTEGER).withSize(20).notNull());
     }
 
 }

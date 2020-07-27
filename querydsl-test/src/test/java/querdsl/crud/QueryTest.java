@@ -19,7 +19,10 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.core.QueryFlag.Position;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 
@@ -79,6 +82,23 @@ class QueryTest {
 			System.err.println(String.format("%1$s,%2$s,%3$s,%4$s,%5$s,%6$s,%7$s", tuple.get(0, Long.class),
 					tuple.get(1, String.class), tuple.get(2, String.class), tuple.get(3, Long.class),
 					tuple.get(4, LocalDateTime.class), tuple.get(5, LocalDateTime.class), tuple.get(6, String.class)));
+		}
+	}
+
+	@Test
+	@DisplayName("测试flag_bit的位操作查询")
+	void testQueryOrder() {
+
+		sqlQuery = sqlQueryFactory.selectFrom(qBook)
+				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 0)
+						.and(qBook.author.isNotNull()))
+				.orderBy(qBook.id.desc());
+		System.err.println(sqlQuery.getSQL().getSQL());
+		var bookList = sqlQuery.fetch();
+		assertFalse(CollectionUtils.isEmpty(bookList));
+
+		for (Book book : bookList) {
+			System.err.println(book);
 		}
 	}
 
