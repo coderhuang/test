@@ -63,9 +63,9 @@ class UpdateTest {
 	void updatePopulateTest() {
 
 		var book = new Book();
-		book.setId(34L);
+		book.setId(78L);
 		book.setUpdateTime(LocalDateTime.now());
-		long effctCount = sqlUpdateClause.populate(book).where(qBook.id.eq(34L)).execute();
+		long effctCount = sqlUpdateClause.populate(book).where(qBook.id.eq(78L)).execute();
 		assertTrue(effctCount > 0);
 	}
 
