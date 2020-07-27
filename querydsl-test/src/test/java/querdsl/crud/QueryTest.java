@@ -3,9 +3,9 @@ package querdsl.crud;
 import static java.util.Objects.isNull;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,14 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.QueryFlag.Position;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 
@@ -30,7 +31,7 @@ import toby.querydsl.Application;
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.domain.qobj.QBook;
 import toby.querydsl.domain.qobj.QSkuProperty;
-import toby.querydsl.util.id.SnowFlakeGenerator;
+import toby.querydsl.utils.id.SnowFlakeGenerator;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { Application.class })
@@ -42,6 +43,9 @@ class QueryTest {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+
+	@Autowired
+	private TransactionTemplate transactionTemplate;
 
 	@Autowired
 	private ApplicationEventPublisher applicationEventPublisher;
@@ -68,6 +72,7 @@ class QueryTest {
 				qBook.updateTime, qSkuProperty.skuName);
 		var tupleList = sqlJoinQuery.from(qBook).leftJoin(qSkuProperty).on(qBook.skuCode.eq(qSkuProperty.skuCode))
 				.fetch();
+		System.err.println(sqlJoinQuery.getSQL().getSQL());
 		assertFalse(CollectionUtils.isEmpty(tupleList));
 
 		for (Tuple tuple : tupleList) {
@@ -90,7 +95,7 @@ class QueryTest {
 	void testQueryOrder() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook)
-				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 0)
+				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 1)
 						.and(qBook.author.isNotNull()))
 				.orderBy(qBook.id.desc());
 		System.err.println(sqlQuery.getSQL().getSQL());
@@ -100,6 +105,69 @@ class QueryTest {
 		for (Book book : bookList) {
 			System.err.println(book);
 		}
+	}
+
+	@Test
+	@DisplayName("测试groupBy的查询")
+	void testQueryGroupingBy() {
+
+		sqlQuery = sqlQueryFactory.selectFrom(qBook).groupBy(qBook.name);
+		System.err.println(sqlQuery.getSQL().getSQL());
+		var bookList = sqlQuery.fetch();
+		assertFalse(CollectionUtils.isEmpty(bookList));
+
+		for (Book book : bookList) {
+			System.err.println(book);
+		}
+	}
+
+	@Test
+	@DisplayName("测试子查询")
+	void testSubQuery() {
+
+		sqlQuery = sqlQueryFactory.selectFrom(qBook)
+				.where(qBook.id.in(SQLExpressions.select(qBook.id).from(qBook).groupBy(qBook.name)));
+		System.err.println(sqlQuery.getSQL().getSQL());
+		var bookList = sqlQuery.fetch();
+		assertFalse(CollectionUtils.isEmpty(bookList));
+
+		for (Book book : bookList) {
+			System.err.println(book);
+		}
+	}
+
+	@Test
+	@DisplayName("测试select literal")
+	void testSelectLiteral() {
+
+		var constantSqlQuery = sqlQueryFactory.select(Expressions.constant(1), Expressions.TRUE,
+				Expressions.constant("lol"));
+		var tupleList = constantSqlQuery.fetch();
+
+		assertFalse(CollectionUtils.isEmpty(tupleList));
+
+		for (Tuple tuple : tupleList) {
+
+			System.err.println(tuple.get(0, Integer.class));
+			System.err.println(tuple.get(1, Boolean.class));
+			System.err.println(tuple.get(2, String.class));
+		}
+	}
+
+	@Test
+	@DisplayName("测试for update语句等的使用")
+	void testForUpdate() {
+
+		transactionTemplate.execute(transactionStatus -> {
+
+			sqlQuery = sqlQueryFactory.selectFrom(qBook).where(qBook.id.eq(1L)).addFlag(Position.AFTER_FILTERS,
+					" FOR UPDATE");
+			System.err.println(sqlQuery.getSQL().getSQL());
+
+			var tupleList = sqlQuery.fetch();
+			assertFalse(CollectionUtils.isEmpty(tupleList));
+			return true;
+		});
 	}
 
 	@Test
@@ -146,5 +214,22 @@ class QueryTest {
 
 		System.err.println(objectMapper.writeValueAsString(skuList));
 		System.err.println(objectMapper.writeValueAsString(books));
+	}
+
+	@Test
+	@DisplayName("给book的flagBit数据赋值")
+	void testAssignFlagBit2Book() throws JsonProcessingException {
+
+		sqlQuery = sqlQueryFactory.selectFrom(qBook);
+		var books = sqlQueryFactory.selectFrom(qBook).where(qBook.flagBit.gt(0)).fetch();
+
+		assertFalse(CollectionUtils.isEmpty(books));
+
+		Random random = new Random(System.currentTimeMillis());
+		for (Book book : books) {
+
+			sqlQueryFactory.update(qBook).set(qBook.flagBit, random.nextInt(Integer.MAX_VALUE))
+					.where(qBook.id.eq(book.getId())).execute();
+		}
 	}
 }
