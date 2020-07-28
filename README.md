@@ -10,7 +10,7 @@
 
 ```
 function fun(){
-  echo "这是一句非常牛逼的代码";
+  echo "这是牛逼的代码";
 }
 fun();
 
