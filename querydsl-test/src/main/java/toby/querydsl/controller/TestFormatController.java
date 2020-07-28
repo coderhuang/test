@@ -18,4 +18,10 @@ public class TestFormatController {
 		
 		return time;
 	}
+	
+	@PostMapping(path = "/book-category")
+	public BookCategory bookCategory(@RequestParam BookCategory category) {
+		
+		return category;
+	}
 }
