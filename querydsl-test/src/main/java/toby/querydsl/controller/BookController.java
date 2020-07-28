@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import toby.querydsl.common.enums.BookCategory;
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.service.BookService;
 

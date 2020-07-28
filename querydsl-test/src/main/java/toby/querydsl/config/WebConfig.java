@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +36,13 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
 	@Autowired
 	private Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+
+		registry.addViewController("/").setViewName("/index");// 默认视图跳转
+		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
@@ -71,7 +80,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 		registry.addConverter(new StringToLocalDateTimeConverter());
 		registry.addConverter(new StringToLocalDateConverter());
 		registry.addConverter(new StringToLocalTimeConverter());
-		
+
 		registry.addConverterFactory(new IntegerBaseEnumConverterFactory());
 		registry.addConverterFactory(new StringBaseEnumConverterFactory());
 		registry.addConverterFactory(new StringToIntegerBaseEnumConverterFactory());
