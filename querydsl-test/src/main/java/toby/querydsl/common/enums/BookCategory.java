@@ -1,6 +1,6 @@
-package toby.querydsl.domain.enums;
+package toby.querydsl.common.enums;
 
-import toby.querydsl.domain.enums.base.IntegerBaseEnumInterface;
+import toby.querydsl.common.enums.base.IntegerBaseEnumInterface;
 
 public enum BookCategory implements IntegerBaseEnumInterface {
 

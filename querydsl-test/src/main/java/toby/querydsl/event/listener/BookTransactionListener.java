@@ -1,4 +1,4 @@
-package toby.querydsl.listener.transaction;
+package toby.querydsl.event.listener;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package toby.querydsl.utils.id;
+package toby.querydsl.common.utils.id;
 
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;

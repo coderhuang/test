@@ -29,10 +29,10 @@ import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 
 import toby.querydsl.Application;
+import toby.querydsl.common.utils.id.SnowFlakeGenerator;
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.domain.qobj.QBook;
 import toby.querydsl.domain.qobj.QSkuProperty;
-import toby.querydsl.utils.id.SnowFlakeGenerator;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { Application.class })
@@ -65,6 +65,22 @@ class QueryTest {
 		var books = sqlQuery.where(qBook.name.eq("《江城》")).fetch();
 		assertNotNull(books);
 		books.forEach(System.err::println);
+	}
+
+	@Test
+	@DisplayName("queryDsl条件查询测试")
+	@Transactional(rollbackFor = Exception.class)
+	@Rollback(false)
+	void testWhereCondition() {
+
+		sqlQuery = sqlQueryFactory.selectFrom(qBook);
+		sqlQuery.where(qBook.name.eq("《江城》")).where(qBook.author.eq("何伟"));
+		System.err.println(sqlQuery.getSQL().getSQL());
+		var bookList = sqlQuery.fetch();
+		
+		assertFalse(CollectionUtils.isEmpty(bookList));
+		
+		bookList.forEach(System.err::println);
 	}
 
 	@Test

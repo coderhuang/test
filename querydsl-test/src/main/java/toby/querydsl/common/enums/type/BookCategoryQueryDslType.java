@@ -1,4 +1,4 @@
-package toby.querydsl.domain.enums.type;
+package toby.querydsl.common.enums.type;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,8 +7,8 @@ import java.sql.Types;
 
 import com.querydsl.sql.types.Type;
 
-import toby.querydsl.domain.enums.BookCategory;
-import toby.querydsl.domain.enums.base.IntegerBaseEnumInterface;
+import toby.querydsl.common.enums.BookCategory;
+import toby.querydsl.common.enums.base.IntegerBaseEnumInterface;
 
 public class BookCategoryQueryDslType implements Type<BookCategory> {
 

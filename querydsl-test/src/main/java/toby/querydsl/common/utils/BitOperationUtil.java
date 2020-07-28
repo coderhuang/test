@@ -1,4 +1,4 @@
-package toby.querydsl.utils;
+package toby.querydsl.common.utils;
 
 public class BitOperationUtil {
 
@@ -11,24 +11,44 @@ public class BitOperationUtil {
 
 		return (flagBit & val) == val;
 	}
-	
+
 	public static boolean containValOfBitPostion(int flagBit, short position) {
-		
+
 		return containVal(flagBit, valOfBitPosition(position));
 	}
-	
+
 	public static boolean containValOfBitIndex(int flagBit, short index) {
-		
+
 		return containVal(flagBit, valOfBitIndex(index));
+	}
+
+	public static int assignBitPositonVal(int flagBit, short position) {
+
+		return flagBit | valOfBitPosition(position);
+	}
+
+	public static int assignBitIndexVal(int flagBit, short index) {
+
+		return flagBit | valOfBitIndex(index);
+	}
+
+	public static int rmBitIndexVal(int flagBit, short position) {
+
+		return flagBit & (~valOfBitPosition(position));
+	}
+
+	public static int rmBitPostionVal(int flagBit, short index) {
+
+		return flagBit & (~valOfBitIndex(index));
 	}
 
 	public static int valOfBitPosition(short position) {
 
 		return position == 1 ? BASE : BASE << (position - 1);
 	}
-	
+
 	public static int valOfBitIndex(short index) {
-		
+
 		return index == 0 ? BASE : BASE << index;
 	}
 }

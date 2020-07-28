@@ -11,7 +11,7 @@ import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 
-import toby.querydsl.domain.enums.type.BookCategoryQueryDslType;
+import toby.querydsl.common.enums.type.BookCategoryQueryDslType;
 
 @Configuration
 public class SqlQueryFactoryConfig {

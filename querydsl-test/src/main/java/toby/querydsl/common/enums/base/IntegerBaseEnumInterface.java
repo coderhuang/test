@@ -1,15 +1,15 @@
-package toby.querydsl.domain.enums.base;
+package toby.querydsl.common.enums.base;
 
 import org.apache.commons.lang.ArrayUtils;
 
-public interface StringBaseEnumInterface {
+public interface IntegerBaseEnumInterface {
 
 	/**
 	 * 获取枚举的存储值
 	 * 
 	 * @return
 	 */
-	String getCode();
+	Integer getCode();
 
 	/**
 	 * 获取枚举的标记字符串
@@ -17,20 +17,20 @@ public interface StringBaseEnumInterface {
 	 * @return
 	 */
 	String getLabel();
-	
-	@SuppressWarnings("unchecked")
-	static <T extends StringBaseEnumInterface> T getEnum(Class<T> enumClass, String value) {
 
-		if (!StringBaseEnumInterface.class.isAssignableFrom(enumClass)) {
+	@SuppressWarnings("unchecked")
+	static <T extends IntegerBaseEnumInterface> T getEnum(Class<T> enumClass, Integer value) {
+
+		if (!IntegerBaseEnumInterface.class.isAssignableFrom(enumClass)) {
 			throw new IllegalArgumentException("参数非法");
 		}
 
-		StringBaseEnumInterface[] enumsConstants = (StringBaseEnumInterface[]) enumClass.getEnumConstants();
+		IntegerBaseEnumInterface[] enumsConstants = (IntegerBaseEnumInterface[]) enumClass.getEnumConstants();
 		if (ArrayUtils.isEmpty(enumsConstants)) {
 			throw new IllegalArgumentException("参数非法");
 		}
 
-		for (StringBaseEnumInterface integerBaseEnumInterface : enumsConstants) {
+		for (IntegerBaseEnumInterface integerBaseEnumInterface : enumsConstants) {
 			
 			if (integerBaseEnumInterface.getCode().equals(value)) {
 				return (T) integerBaseEnumInterface;

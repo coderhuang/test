@@ -1,4 +1,4 @@
-package toby.querydsl.utils.json.jackson;
+package toby.querydsl.common.utils.json.jackson;
 
 import java.io.IOException;
 
@@ -6,14 +6,14 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
-import toby.querydsl.domain.enums.base.StringBaseEnumInterface;
+import toby.querydsl.common.enums.base.IntegerBaseEnumInterface;
 
-public class StringBaseEnumSerializer<T extends StringBaseEnumInterface> extends JsonSerializer<T> {
+public class IntegerBaseEnumSerializer<T extends IntegerBaseEnumInterface> extends JsonSerializer<T> {
 
 	@Override
 	public void serialize(T value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
 		
-		gen.writeString(value.getCode());
+		gen.writeNumber(value.getCode());
 	}
 
 }

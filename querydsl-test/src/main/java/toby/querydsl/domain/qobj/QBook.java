@@ -20,7 +20,7 @@ import java.sql.Types;
  * QBook is a Querydsl query type for Book
  */
 @Generated("com.querydsl.sql.codegen.MetaDataSerializer")
-public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
+public class QBook extends com.querydsl.sql.RelationalPathBase<Book> implements IdAssignQObj<Long> {
 
     private static final long serialVersionUID = -217428281;
 
@@ -28,7 +28,7 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
 
     public final StringPath author = createString("author");
 
-    public final EnumPath<toby.querydsl.domain.enums.BookCategory> category = createEnum("category", toby.querydsl.domain.enums.BookCategory.class);
+    public final EnumPath<toby.querydsl.common.enums.BookCategory> category = createEnum("category", toby.querydsl.common.enums.BookCategory.class);
 
     public final DateTimePath<java.time.LocalDateTime> createTime = createDateTime("createTime", java.time.LocalDateTime.class);
 
@@ -82,6 +82,12 @@ public class QBook extends com.querydsl.sql.RelationalPathBase<Book> {
         addMetadata(skuCode, ColumnMetadata.named("sku_code").withIndex(7).ofType(Types.BIGINT).withSize(19).notNull());
         addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(9).ofType(Types.TIMESTAMP).withSize(19));
     }
+
+	@Override
+	public NumberPath<Long> getId() {
+		
+		return id;
+	}
 
 }
 

@@ -1,4 +1,4 @@
-package toby.querydsl.utils.json.jackson;
+package toby.querydsl.common.utils.json.jackson;
 
 import java.io.IOException;
 
@@ -9,9 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-import toby.querydsl.domain.enums.base.IntegerBaseEnumInterface;
+import toby.querydsl.common.enums.base.StringBaseEnumInterface;
 
-public class IntegerBaseEnumDeserializer<T extends IntegerBaseEnumInterface> extends JsonDeserializer<T> {
+public class StringBaseEnumDeserializer<T extends StringBaseEnumInterface> extends JsonDeserializer<T> {
 
 	@Override
 	public T deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
@@ -21,7 +21,7 @@ public class IntegerBaseEnumDeserializer<T extends IntegerBaseEnumInterface> ext
         @SuppressWarnings("unchecked")
 		Class<T> findPropertyType = (Class<T>) BeanUtils.findPropertyType(currentName, currentValue.getClass());
         
-        return IntegerBaseEnumInterface.getEnum(findPropertyType, jp.getIntValue());
+        return StringBaseEnumInterface.getEnum(findPropertyType, jp.getText());
 	}
 
 }

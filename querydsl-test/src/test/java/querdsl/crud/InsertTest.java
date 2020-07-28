@@ -29,9 +29,9 @@ import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLInsertClause;
 
 import toby.querydsl.Application;
+import toby.querydsl.common.enums.BookCategory;
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.domain.entity.SkuProperty;
-import toby.querydsl.domain.enums.BookCategory;
 import toby.querydsl.domain.qobj.QBook;
 import toby.querydsl.domain.qobj.QSkuProperty;
 import toby.querydsl.event.SaveBookEvent;

@@ -17,12 +17,13 @@ import com.querydsl.sql.SQLTemplates;
 import com.querydsl.sql.codegen.MetaDataExporter;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 
-import toby.querydsl.domain.enums.BookCategory;
-import toby.querydsl.domain.enums.type.BookCategoryQueryDslType;
+import toby.querydsl.common.enums.BookCategory;
+import toby.querydsl.common.enums.type.BookCategoryQueryDslType;
+import toby.querydsl.domain.entity.IdAssignEntity;
 
 @DisplayName("queryDsl的bean和queryObj的生成类")
 class QobjGenerate {
-	
+
 	SQLTemplates mySqlTemplates() {
 
 		return MySQLTemplates.builder()
@@ -43,29 +44,30 @@ class QobjGenerate {
 
 		return configuration;
 	}
-	
+
 	@Test
 	@DisplayName("queryDsl的bean和queryObj的生成")
 	void generateQobj() throws SQLException {
-		
+
 		Driver driver = new Driver();
 		String url = "jdbc:mysql://127.0.0.1:3306/toby_test?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC";
 		Properties info = new Properties();
 		info.setProperty("user", "root");
 		info.setProperty("password", "nicai123");
 		Connection connection = driver.connect(url, info);
-		
+
 		MetaDataExporter exporter = new MetaDataExporter();
 		exporter.setPackageName("toby.querydsl.domain.qobj");
 		exporter.setBeanPackageName("toby.querydsl.domain.entity");
 		exporter.setTargetFolder(new File("src/main/java"));
-		
+
 		var beanSerializer = new BeanSerializer();
 		beanSerializer.setAddToString(true);
+		beanSerializer.addInterface(IdAssignEntity.class);
 		exporter.setBeanSerializer(beanSerializer);
 		
 		exporter.setConfiguration(queryFactoryConfiguration());
-		
+
 		exporter.export(connection.getMetaData());
 	}
 

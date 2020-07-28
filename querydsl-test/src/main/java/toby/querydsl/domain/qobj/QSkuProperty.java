@@ -20,7 +20,7 @@ import java.sql.Types;
  * QSkuProperty is a Querydsl query type for SkuProperty
  */
 @Generated("com.querydsl.sql.codegen.MetaDataSerializer")
-public class QSkuProperty extends com.querydsl.sql.RelationalPathBase<SkuProperty> {
+public class QSkuProperty extends com.querydsl.sql.RelationalPathBase<SkuProperty> implements IdAssignQObj<Long> {
 
     private static final long serialVersionUID = -1298462604;
 
@@ -70,6 +70,12 @@ public class QSkuProperty extends com.querydsl.sql.RelationalPathBase<SkuPropert
         addMetadata(skuName, ColumnMetadata.named("sku_name").withIndex(2).ofType(Types.VARCHAR).withSize(30).notNull());
         addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(5).ofType(Types.TIMESTAMP).withSize(19));
     }
+
+	@Override
+	public NumberPath<Long> getId() {
+		
+		return id;
+	}
 
 }
 
