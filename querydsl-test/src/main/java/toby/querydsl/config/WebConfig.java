@@ -12,6 +12,14 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+
+import toby.querydsl.common.enums.base.IntegerBaseEnumInterface;
+import toby.querydsl.common.utils.json.jackson.IntegerBaseEnumDeserializer;
+import toby.querydsl.common.utils.json.jackson.IntegerBaseEnumSerializer;
+import toby.querydsl.common.utils.json.jackson.StringBaseEnumDeserializer;
+import toby.querydsl.common.utils.json.jackson.StringBaseEnumSerializer;
 import toby.querydsl.config.interceptor.BizContextInterceptor;
 
 @Configuration
@@ -23,15 +31,24 @@ public class WebConfig extends WebMvcConfigurationSupport {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 
-		registry.addInterceptor(new BizContextInterceptor()).addPathPatterns("/**").excludePathPatterns("/error");
+		registry.addInterceptor(new BizContextInterceptor()).addPathPatterns("/**").excludePathPatterns("/error",
+				"/resources");
 		super.addInterceptors(registry);
 	}
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-		MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(
-				jackson2ObjectMapperBuilder.build());
+		var simpleModule = new SimpleModule();
+		simpleModule.addSerializer(new IntegerBaseEnumSerializer<>());
+		simpleModule.addSerializer(new StringBaseEnumSerializer<>());
+		simpleModule.addDeserializer(IntegerBaseEnumInterface.class, new IntegerBaseEnumDeserializer<>());
+		simpleModule.addDeserializer(StringBaseEnumSerializer.class, new StringBaseEnumDeserializer<>());
+
+		ObjectMapper objectMapper = jackson2ObjectMapperBuilder.build();
+		objectMapper.registerModule(simpleModule);
+
+		MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper);
 		List<MediaType> mediaTypeList = new ArrayList<>(2);
 		mediaTypeList.add(MediaType.APPLICATION_JSON);
 		mediaTypeList.add(MediaType.APPLICATION_JSON_UTF8);
