@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 import com.querydsl.sql.MySQLTemplates;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.SQLTemplates;
-import com.querydsl.sql.spring.SpringConnectionProvider;
 import com.querydsl.sql.spring.SpringExceptionTranslator;
 
 import toby.querydsl.common.enums.type.BookCategoryQueryDslType;
+import toby.querydsl.common.provider.SpringConnectionProvider;
 
 @Configuration
 public class SqlQueryFactoryConfig {
@@ -37,10 +37,10 @@ public class SqlQueryFactoryConfig {
 
 		return configuration;
 	}
-
+	
 	@Bean
 	public SQLQueryFactory sqlQueryFactory(com.querydsl.sql.Configuration configuration, DataSource dataSource) {
 
-		return new SQLQueryFactory(configuration, new SpringConnectionProvider(dataSource));
+		return new SQLQueryFactory(configuration, new SpringConnectionProvider(dataSource, configuration));
 	}
 }

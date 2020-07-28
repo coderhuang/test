@@ -1,11 +1,10 @@
-package toby.querydsl.dao;
+package toby.querydsl.service;
 
 import java.util.List;
 
 import toby.querydsl.domain.entity.Book;
 
-public interface BookDao extends BaseDao<Book, Long> {
-	
+public interface BookService {
+
 	List<Book> allBook();
-	
 }

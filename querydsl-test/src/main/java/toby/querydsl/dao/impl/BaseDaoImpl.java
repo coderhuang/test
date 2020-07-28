@@ -20,12 +20,12 @@ import toby.querydsl.dao.BaseDao;
 import toby.querydsl.domain.entity.IdAssignEntity;
 import toby.querydsl.domain.qobj.IdAssignQObj;
 
-public class BaseDaoImpl<T extends IdAssignEntity<K>, K extends Number & Comparable<?>, M extends RelationalPathBase<T> & IdAssignQObj<K>>
+public abstract class BaseDaoImpl<T extends IdAssignEntity<K>, K extends Number & Comparable<?>, M extends RelationalPathBase<T> & IdAssignQObj<K>>
 		implements BaseDao<T, K>, ApplicationContextAware {
 
-	private M qObj;
+	protected M qObj;
 
-	private SQLQueryFactory sqlQueryFactory;
+	protected SQLQueryFactory sqlQueryFactory;
 
 	protected BaseDaoImpl(M qObj) {
 
