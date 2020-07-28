@@ -7,3 +7,11 @@
 ## test-kafka
 针对kafka的一些测试
 >>>>>>>>>>>与君分享
+
+```
+function fun(){
+  echo "这是一句非常牛逼的代码";
+}
+fun();
+
+```
