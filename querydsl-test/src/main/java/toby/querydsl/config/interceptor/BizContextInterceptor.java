@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import toby.querydsl.common.constants.BizContextConstant;
 import toby.querydsl.common.enums.BizContext;
 
 public class BizContextInterceptor implements HandlerInterceptor {
@@ -20,15 +21,15 @@ public class BizContextInterceptor implements HandlerInterceptor {
 			throws Exception {
 
 		logger.info("业务上下文-拦截器preHandle：begin");
-		
-		BizContext.INSTANCE.clear();
+		// 线程池复用的情况下,在本次请求的之前执行过程中,可能异常退出导致没有清空原有请求的上下文的情况,所以方法执行前,先清空一次上下文
+//		BizContext.INSTANCE.clear();
 
-		String userName = request.getHeader("x-username");
-		String userCode = request.getHeader("x-usercode");
+		String userCode = request.getHeader(BizContextConstant.USER_CODE);
+		String userName = request.getHeader(BizContextConstant.USER_NAME);
 
 		BizContext.INSTANCE.setValue("userName", userName);
 		BizContext.INSTANCE.setValue("userCode", userCode);
-		
+
 //		if (HandlerMethod.class.equals(handler.getClass())) {
 //
 //			HandlerMethod method = (HandlerMethod) handler;
@@ -39,14 +40,21 @@ public class BizContextInterceptor implements HandlerInterceptor {
 
 		return true;
 	}
-	
+
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			@Nullable ModelAndView modelAndView) throws Exception {
-		
+
 		logger.info("业务上下文-拦截器postHandle：begin");
-		
-		BizContext.INSTANCE.clear();
+
 		logger.info("业务上下文-拦截器postHandle：end");
+	}
+
+	@Override
+	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler,
+			@Nullable Exception ex) throws Exception {
+
+		BizContext.INSTANCE.clear();
+		logger.info("业务上下文-拦截器afterCompletion：啊哈哈哈");
 	}
 }

@@ -21,4 +21,10 @@ public class BookServiceImpl implements BookService {
 		return bookDao.allBook();
 	}
 
+	@Override
+	public Book queryBookById(Long id) {
+		
+		return bookDao.selectById(id);
+	}
+
 }

@@ -28,7 +28,7 @@ public class SqlQueryFactoryConfig {
 	}
 
 	@Bean
-	public com.querydsl.sql.Configuration querFactoryConfiguration(SQLTemplates sqlTemplates) {
+	public com.querydsl.sql.Configuration queryFactoryConfiguration(SQLTemplates sqlTemplates) {
 
 		var configuration = new com.querydsl.sql.Configuration(sqlTemplates);
 		configuration.setExceptionTranslator(new SpringExceptionTranslator());
