@@ -27,8 +27,8 @@ public class BizContextInterceptor implements HandlerInterceptor {
 		String userCode = request.getHeader(BizContextConstant.USER_CODE_HEADER_NAME);
 		String userName = request.getHeader(BizContextConstant.USER_NAME_HEADER_NAME);
 
-		BizContext.INSTANCE.setValue("userName", userName);
-		BizContext.INSTANCE.setValue("userCode", userCode);
+		BizContext.INSTANCE.setValue(BizContextConstant.USER_NAME, userName);
+		BizContext.INSTANCE.setValue(BizContextConstant.USER_CODE, userCode);
 
 //		if (HandlerMethod.class.equals(handler.getClass())) {
 //
