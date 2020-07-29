@@ -1,4 +1,4 @@
-# 本项目用于做一些框架的调研测试
+# 本项目用于做一些框架的调研测试（基于Java 11）
 
 ## querydsl-test
 基于QueryDsl sql做数据库数据访问层框架,自定义两类业务enum（基于int和string）,有LocalDateTime相关的messgaeConverter的配置,有针对自定义枚举的序列化和反序列化配置
