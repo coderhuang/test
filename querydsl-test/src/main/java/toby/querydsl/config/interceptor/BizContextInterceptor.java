@@ -22,10 +22,10 @@ public class BizContextInterceptor implements HandlerInterceptor {
 
 		logger.info("业务上下文-拦截器preHandle：begin");
 		// 线程池复用的情况下,在本次请求的之前执行过程中,可能异常退出导致没有清空原有请求的上下文的情况,所以方法执行前,先清空一次上下文
-//		BizContext.INSTANCE.clear();
+		BizContext.INSTANCE.clear();
 
-		String userCode = request.getHeader(BizContextConstant.USER_CODE);
-		String userName = request.getHeader(BizContextConstant.USER_NAME);
+		String userCode = request.getHeader(BizContextConstant.USER_CODE_HEADER_NAME);
+		String userName = request.getHeader(BizContextConstant.USER_NAME_HEADER_NAME);
 
 		BizContext.INSTANCE.setValue("userName", userName);
 		BizContext.INSTANCE.setValue("userCode", userCode);
