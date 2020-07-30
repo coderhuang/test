@@ -12,6 +12,7 @@ import com.querydsl.sql.spring.SpringExceptionTranslator;
 
 import toby.querydsl.common.enums.type.BookCategoryQueryDslType;
 import toby.querydsl.common.provider.SpringConnectionProvider;
+import toby.querydsl.event.listener.PrintSqlListener;
 
 @Configuration
 public class SqlQueryFactoryConfig {
@@ -33,6 +34,7 @@ public class SqlQueryFactoryConfig {
 		var configuration = new com.querydsl.sql.Configuration(sqlTemplates);
 		configuration.setExceptionTranslator(new SpringExceptionTranslator());
 		configuration.register(new BookCategoryQueryDslType());
+		configuration.addListener(new PrintSqlListener());
 //		configuration.register("book", "category", new BookCategoryQueryDslType());
 
 		return configuration;

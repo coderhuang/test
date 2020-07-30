@@ -24,6 +24,8 @@ import org.springframework.transaction.support.TransactionSynchronizationAdapter
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import com.querydsl.core.QueryFlag.Position;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQueryFactory;
 import com.querydsl.sql.dml.SQLInsertClause;
@@ -175,28 +177,57 @@ class InsertTest {
 		assertNotNull(id);
 		System.err.println(id);
 	}
-	
+
 	AtomicInteger ai = new AtomicInteger(0);
+
 	@Test
 	@DisplayName("skuProperty插入")
 	@Transactional
 	@Rollback(false)
 	void insert() {
-		
+
 		String skuNameBase = "商品目_";
 		for (int i = 0; i < 30; i++) {
-			
+
 			var skuName = skuNameBase + ai.incrementAndGet();
 			var now = LocalDateTime.now();
-			
+
 			var skuProperty = new SkuProperty();
-			
+
 			skuProperty.setCreateTime(now);
 			skuProperty.setUpdateTime(now);
 			skuProperty.setSkuName(skuName);
 			long effectCount = sqlQueryFactory.insert(QSkuProperty.skuProperty).populate(skuProperty).execute();
 			assertTrue(effectCount > 0);
 		}
+	}
+
+	@Test
+	@DisplayName("skuProperty插入")
+	@Rollback(false)
+	void testInsertOnDuplicateKey() {
+
+		var skuName = "商品目_" + ai.incrementAndGet();
+		var now = LocalDateTime.now();
+		// 给个老值用以测试 on duplicate key
+		long skuCode = 105022356936089601L;
+
+		var skuProperty = new SkuProperty();
+
+		skuProperty.setCreateTime(now);
+		skuProperty.setUpdateTime(now);
+		skuProperty.setSkuName(skuName);
+		skuProperty.setSkuCode(skuCode);
+
+		QSkuProperty qSkuProperty = QSkuProperty.skuProperty;
+		sqlInsertClause = sqlQueryFactory.insert(qSkuProperty).populate(skuProperty).addFlag(Position.END,
+				Expressions.booleanTemplate(" ON DUPLICATE KEY UPDATE "
+						+ qSkuProperty.getMetadata(qSkuProperty.updateTime).getName() + " = {0}", now));
+		sqlInsertClause.getSQL().forEach(sqlBindings -> System.err.println(sqlBindings.getSQL()));
+		long effectCount = sqlInsertClause.execute();
+		assertTrue(effectCount > 0);
+		
+		System.err.println(effectCount);
 	}
 
 }

@@ -21,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.querydsl.core.QueryFlag.Position;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLExpressions;
@@ -75,11 +74,10 @@ class QueryTest {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook);
 		sqlQuery.where(qBook.name.eq("《江城》")).where(qBook.author.eq("何伟"));
-		System.err.println(sqlQuery.getSQL().getSQL());
 		var bookList = sqlQuery.fetch();
-		
+
 		assertFalse(CollectionUtils.isEmpty(bookList));
-		
+
 		bookList.forEach(System.err::println);
 	}
 
@@ -93,7 +91,6 @@ class QueryTest {
 				qBook.updateTime, qSkuProperty.skuName);
 		var tupleList = sqlJoinQuery.from(qBook).leftJoin(qSkuProperty).on(qBook.skuCode.eq(qSkuProperty.skuCode))
 				.fetch();
-		System.err.println(sqlJoinQuery.getSQL().getSQL());
 		assertFalse(CollectionUtils.isEmpty(tupleList));
 
 		for (Tuple tuple : tupleList) {
@@ -121,7 +118,6 @@ class QueryTest {
 				.where(Expressions.booleanTemplate(qBook.getMetadata(qBook.flagBit).getName() + " & {0} = {0}", 3)
 						.and(qBook.author.isNotNull()))
 				.orderBy(qBook.id.desc());
-		System.err.println(sqlQuery.getSQL().getSQL());
 		var bookList = sqlQuery.fetch();
 		assertFalse(CollectionUtils.isEmpty(bookList));
 
@@ -137,7 +133,6 @@ class QueryTest {
 	void testQueryGroupingBy() {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook).groupBy(qBook.name);
-		System.err.println(sqlQuery.getSQL().getSQL());
 		var bookList = sqlQuery.fetch();
 		assertFalse(CollectionUtils.isEmpty(bookList));
 
@@ -154,7 +149,6 @@ class QueryTest {
 
 		sqlQuery = sqlQueryFactory.selectFrom(qBook)
 				.where(qBook.id.in(SQLExpressions.select(qBook.id).from(qBook).groupBy(qBook.name)));
-		System.err.println(sqlQuery.getSQL().getSQL());
 		var bookList = sqlQuery.fetch();
 		assertFalse(CollectionUtils.isEmpty(bookList));
 
@@ -188,9 +182,7 @@ class QueryTest {
 
 		transactionTemplate.execute(transactionStatus -> {
 
-			sqlQuery = sqlQueryFactory.selectFrom(qBook).where(qBook.id.eq(1L)).addFlag(Position.AFTER_FILTERS,
-					" FOR UPDATE");
-			System.err.println(sqlQuery.getSQL().getSQL());
+			sqlQuery = sqlQueryFactory.selectFrom(qBook).where(qBook.id.eq(1L)).forUpdate();
 
 			var tupleList = sqlQuery.fetch();
 			assertFalse(CollectionUtils.isEmpty(tupleList));
