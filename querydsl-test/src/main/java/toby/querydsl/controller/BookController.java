@@ -34,11 +34,14 @@ public class BookController {
 	
 	/**
 	 * 用于测试异常情况
+	 * @throws Throwable 
 	 */
 	@GetMapping(path = "/bizlaslal")
-	public void lll() {
+	public void lll() throws Throwable {
 		
-		throw new IllegalStateException();
+//		throw new Error("error 啊啊啊啊啊啊啊啊啊啊啊");
+		throw new Throwable("throwable 啊啊啊啊啊啊啊啊啊啊啊");
+//		throw new IllegalStateException();
 	}
 	
 
