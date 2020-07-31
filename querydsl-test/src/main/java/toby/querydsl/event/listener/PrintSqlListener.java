@@ -19,8 +19,6 @@ public class PrintSqlListener extends SQLBaseListener {
 	@Override
 	public void executed(SQLListenerContext context) {
 		
-		context.getPreparedStatements().forEach(ps -> logger.info("PreparedStatement:{}", ps.toString()));
-
-		logger.info("SQL执行后-SQL语句输出:{}", context.getSQL());
+		context.getPreparedStatements().forEach(ps -> logger.info("SQL执行后-SQL语句输出: PreparedStatement:{}", ps.toString()));
 	}
 }

@@ -221,12 +221,11 @@ class InsertTest {
 
 		QSkuProperty qSkuProperty = QSkuProperty.skuProperty;
 		sqlInsertClause = sqlQueryFactory.insert(qSkuProperty).populate(skuProperty).addFlag(Position.END,
-				Expressions.booleanTemplate(" ON DUPLICATE KEY UPDATE "
-						+ qSkuProperty.getMetadata(qSkuProperty.updateTime).getName() + " = {0}", now));
-		sqlInsertClause.getSQL().forEach(sqlBindings -> System.err.println(sqlBindings.getSQL()));
+				Expressions.booleanTemplate(String.format(" ON DUPLICATE KEY UPDATE %1$s = {0}",
+						qSkuProperty.getMetadata(qSkuProperty.updateTime).getName()), now));
 		long effectCount = sqlInsertClause.execute();
 		assertTrue(effectCount > 0);
-		
+
 		System.err.println(effectCount);
 	}
 
