@@ -1,6 +1,6 @@
 package toby.querydsl.common.enums.base;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 public interface StringBaseEnumInterface {
 
