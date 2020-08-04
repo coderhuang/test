@@ -9,4 +9,4 @@ server:  port: 8100  servlet:    context-path: /        spring:
       maximum-pool-size: 50
       minimum-idle: 10
       connection-timeout: 6000
-      connection-test-query: SELECT 1      auto-commit: true
+      connection-test-query: SELECT 1      auto-commit: true  redis:      database: 3      host: 192.168.21.141      port: 6379      password:       Lettuce:        pool:          max-active: 8          max-wait: -1          max-idle: 8          min-idle: 0            

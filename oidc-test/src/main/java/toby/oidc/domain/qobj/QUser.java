@@ -1,17 +1,20 @@
 package toby.oidc.domain.qobj;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
-import toby.oidc.domain.entity.User;
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
-
-import com.querydsl.core.types.dsl.*;
-
-import com.querydsl.core.types.PathMetadata;
-import javax.annotation.Generated;
-import com.querydsl.core.types.Path;
-
-import com.querydsl.sql.ColumnMetadata;
 import java.sql.Types;
+
+import javax.annotation.Generated;
+
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.DateTimePath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+import com.querydsl.sql.ColumnMetadata;
+
+import toby.oidc.domain.base.IdAssignQobj;
+import toby.oidc.domain.entity.User;
 
 
 
@@ -20,7 +23,7 @@ import java.sql.Types;
  * QUser is a Querydsl query type for User
  */
 @Generated("com.querydsl.sql.codegen.MetaDataSerializer")
-public class QUser extends com.querydsl.sql.RelationalPathBase<User> {
+public class QUser extends com.querydsl.sql.RelationalPathBase<User> implements IdAssignQobj<Long> {
 
     private static final long serialVersionUID = -483325115;
 
@@ -67,6 +70,12 @@ public class QUser extends com.querydsl.sql.RelationalPathBase<User> {
         addMetadata(name, ColumnMetadata.named("name").withIndex(2).ofType(Types.VARCHAR).withSize(100));
         addMetadata(updateTime, ColumnMetadata.named("update_time").withIndex(4).ofType(Types.TIMESTAMP).withSize(19).notNull());
     }
+
+	@Override
+	public NumberPath<Long> getId() {
+		
+		return id;
+	}
 
 }
 
