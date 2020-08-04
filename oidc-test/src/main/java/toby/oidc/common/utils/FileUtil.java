@@ -8,6 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 
+import org.apache.commons.lang3.StringUtils;
+
 public final class FileUtil {
 
 	private FileUtil() {
@@ -29,10 +31,20 @@ public final class FileUtil {
 
 		try (RandomAccessFile raf = new RandomAccessFile(file, "rw"); FileChannel fileChannel = raf.getChannel()) {
 
-			
+			ByteBuffer bBuf = ByteBuffer.allocate((int) raf.length());
+			int remainSize = fileChannel.read(bBuf);
+			while (remainSize != -1) {
+
+				remainSize = fileChannel.read(bBuf);
+			}
+			if (!bBuf.hasArray()) {
+
+				return StringUtils.EMPTY;
+			}
+
+			return new String(bBuf.array());
 		}
 
-		return null;
 	}
 
 }
