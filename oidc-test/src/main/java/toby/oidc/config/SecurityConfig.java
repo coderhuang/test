@@ -43,11 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 
 //		http.csrf().disable();
-		http.oauth2Login();
+		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login/**").permitAll().anyRequest()
+				.authenticated().and().oauth2Login();
 
 		http.requestMatchers().antMatchers("/oauth/**", "/login/**", "/logout/**", "/openid/**").and()
-				.authorizeRequests().antMatchers("/oauth/**", "/login/**").authenticated().and().formLogin()
-				.permitAll();
+				.authorizeRequests().antMatchers("/oauth/**").authenticated().and().formLogin().permitAll();
 
 	}
 

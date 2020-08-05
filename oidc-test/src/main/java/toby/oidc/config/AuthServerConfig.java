@@ -20,13 +20,13 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@Value("${user.oauth.clientId}")
+	@Value("${user.oauth.client-id}")
 	private String ClientID;
 
-	@Value("${user.oauth.clientSecret}")
+	@Value("${user.oauth.client-secret}")
 	private String ClientSecret;
 
-	@Value("${user.oauth.redirectUri}")
+	@Value("${user.oauth.redirect-uri}")
 	private String RedirectURL;
 
 	@Override
