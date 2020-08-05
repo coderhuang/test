@@ -1,7 +1,6 @@
 package toby.oidc.common.utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -76,7 +75,7 @@ public final class AlgorithmUtil {
 
 		try {
 			return Algorithm.HMAC512("1234567890");
-		} catch (IllegalArgumentException | UnsupportedEncodingException e) {
+		} catch (IllegalArgumentException e) {
 
 			e.printStackTrace();
 			return null;

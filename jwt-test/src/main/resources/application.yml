@@ -1,0 +1,39 @@
+server:
+  port: 8101
+  servlet:
+    context-path: /
+    
+    
+spring:
+  application:
+    name: jwt-test
+  http:
+    encoding:
+      force-request: true
+      charset: UTF-8
+  thymeleaf:
+    cache: false
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/oidc?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC
+    username: root
+    password: nicai123
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 10
+      connection-timeout: 6000
+      connection-test-query: SELECT 1
+      auto-commit: true
+  redis:
+      database: 3
+      host: 192.168.21.141
+      port: 6379
+      password: 
+      timeout: 1000
+      Lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
