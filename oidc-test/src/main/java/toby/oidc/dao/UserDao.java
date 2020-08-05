@@ -5,4 +5,5 @@ import toby.oidc.domain.entity.User;
 
 public interface UserDao extends BaseDao<User, Long> {
 
+	User selectByName(String name);
 }

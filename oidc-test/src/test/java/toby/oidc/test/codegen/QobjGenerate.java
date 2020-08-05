@@ -56,6 +56,7 @@ class QobjGenerate {
 		exporter.setPackageName("toby.oidc.domain.qobj");
 		exporter.setBeanPackageName("toby.oidc.domain.entity");
 		exporter.setTargetFolder(new File("src/main/java"));
+		exporter.setTableNamePattern("^(user)?(client_properties)?$");
 
 		var beanSerializer = new BeanSerializer();
 		beanSerializer.setAddToString(true);

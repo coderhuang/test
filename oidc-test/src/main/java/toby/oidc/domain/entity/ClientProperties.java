@@ -4,20 +4,36 @@ import javax.annotation.Generated;
 import toby.oidc.domain.base.IdAssignEntity;
 
 /**
- * User is a Querydsl bean type
+ * ClientProperties is a Querydsl bean type
  */
 @Generated("com.querydsl.codegen.BeanSerializer")
-public class User implements IdAssignEntity<Long> {
+public class ClientProperties implements IdAssignEntity<Long> {
+
+    private Long clientId;
+
+    private String clientSecret;
 
     private java.time.LocalDateTime createTime;
 
     private Long id;
 
-    private String name;
-
-    private String password;
-
     private java.time.LocalDateTime updateTime;
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
+    }
 
     public java.time.LocalDateTime getCreateTime() {
         return createTime;
@@ -35,22 +51,6 @@ public class User implements IdAssignEntity<Long> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public java.time.LocalDateTime getUpdateTime() {
         return updateTime;
     }
@@ -61,7 +61,7 @@ public class User implements IdAssignEntity<Long> {
 
     @Override
     public String toString() {
-         return "createTime = " + createTime + ", id = " + id + ", name = " + name + ", password = " + password + ", updateTime = " + updateTime;
+         return "clientId = " + clientId + ", clientSecret = " + clientSecret + ", createTime = " + createTime + ", id = " + id + ", updateTime = " + updateTime;
     }
 
 }
