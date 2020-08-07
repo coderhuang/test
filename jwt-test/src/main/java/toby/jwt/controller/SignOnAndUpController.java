@@ -54,23 +54,46 @@ public class SignOnAndUpController {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
+//	@PostMapping("/sign-on")
+//	public String signOn(@RequestParam String name, @RequestParam String password, HttpServletResponse response) {
+//
+//		final Pair<User, User> pair = new MutablePair<>();
+//		IN_MEMORY_USERS.entrySet().stream().filter(entry -> {
+//
+//			User user = entry.getValue();
+//			return !(!name.equals(user.getName()) || !password.equals(user.getPassword()));
+//		}).findAny().ifPresent(entry -> pair.setValue(entry.getValue()));
+//
+//		User user = pair.getValue();
+//		if (Objects.isNull(user)) {
+//
+//			response.setStatus(HttpStatus.BAD_REQUEST.value());
+//			return StringUtils.EMPTY;
+//		}
+//
+//		String uuid = UUID.randomUUID().toString();
+//		String key = RedisConfig.REDIS_KEY_PREFIX + uuid;
+//		redisTemplate.opsForValue().set(key, user, 1800, TimeUnit.SECONDS);
+//
+//		return JwtUtil.createToken(uuid, user);
+//	}
+	
 	@PostMapping("/sign-on")
 	public String signOn(@RequestParam String name, @RequestParam String password, HttpServletResponse response) {
 
-		final Pair<User, User> pair = new MutablePair<>();
-		IN_MEMORY_USERS.entrySet().stream().filter(entry -> {
+		var optionalEntry = IN_MEMORY_USERS.entrySet().stream().filter(entry -> {
 
 			User user = entry.getValue();
-			return !(!name.equals(user.getName()) || !password.equals(user.getPassword()));
-		}).findAny().ifPresent(entry -> pair.setValue(entry.getValue()));
+			return name.equals(user.getName()) && password.equals(user.getPassword());
+		}).findAny();
 
-		User user = pair.getValue();
-		if (Objects.isNull(user)) {
+		if (!optionalEntry.isPresent()) {
 
 			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			return StringUtils.EMPTY;
 		}
 
+		User user = optionalEntry.get().getValue();
 		String uuid = UUID.randomUUID().toString();
 		String key = RedisConfig.REDIS_KEY_PREFIX + uuid;
 		redisTemplate.opsForValue().set(key, user, 1800, TimeUnit.SECONDS);
