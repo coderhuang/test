@@ -39,40 +39,38 @@ public class JWTFilter implements Filter {
 		final String token = request.getHeader("authorization");
 
 		if ("OPTIONS".equals(request.getMethod())) {
-			
+
 			response.setStatus(HttpServletResponse.SC_OK);
 			chain.doFilter(request, response);
 			return;
 		}
 		// Except OPTIONS, other request should be checked by JWT
-		else {
 
-			if (token == null) {
-				
+		if (token == null) {
+
 //				response.getWriter().write("没有token！");
-				chain.doFilter(req, res);
-				return;
-			}
-
-			Map<String, Claim> userData = JwtUtil.verifyToken(token);
-			if (userData == null) {
-
-				response.getWriter().write("token不合法！");
-				return;
-			}
-
-			Integer id = userData.get("id").asInt();
-			String name = userData.get("name").asString();
-			String redisKeyUserSuffix = userData.get(PublicClaims.SUBJECT).asString();
-
-			BizContext.INSTANCE.setValue("id", id);
-			BizContext.INSTANCE.setValue("name", name);
-			BizContext.INSTANCE.setValue("redisKeyUserSuffix", redisKeyUserSuffix);
-
 			chain.doFilter(req, res);
-			
-			BizContext.INSTANCE.clear();
+			return;
 		}
+
+		Map<String, Claim> userData = JwtUtil.verifyToken(token);
+		if (userData == null) {
+
+			response.getWriter().write("token不合法！");
+			return;
+		}
+
+		Integer id = userData.get("id").asInt();
+		String name = userData.get("name").asString();
+		String redisKeyUserSuffix = userData.get(PublicClaims.SUBJECT).asString();
+
+		BizContext.INSTANCE.setValue("id", id);
+		BizContext.INSTANCE.setValue("name", name);
+		BizContext.INSTANCE.setValue("redisKeyUserSuffix", redisKeyUserSuffix);
+
+		chain.doFilter(req, res);
+
+		BizContext.INSTANCE.clear();
 
 	}
 
