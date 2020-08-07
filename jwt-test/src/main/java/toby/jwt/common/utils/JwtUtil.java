@@ -32,24 +32,15 @@ public class JwtUtil {
 		headerMap.put("alg", "HS512");
 		headerMap.put("type", "JWT");
 
-		return JWT.create()
-				.withHeader(headerMap)
-				.withIssuer("https://account.mysite.com")
-				.withAudience("123456")
-				.withIssuedAt(LocalDateTimeUtil.asDate(LocalDateTime.now()))
-				.withSubject(userRedisKeySuffix)
+		return JWT.create().withHeader(headerMap).withIssuer("https://account.mysite.com").withAudience("123456")
+				.withIssuedAt(LocalDateTimeUtil.asDate(LocalDateTime.now())).withSubject(userRedisKeySuffix)
 				.withExpiresAt(LocalDateTimeUtil.asDate(LocalDateTime.now().plusSeconds(EXPIRATION)))
-				.withClaim("id", user.getId())
-				.withClaim("name", user.getName())
-				.sign(Algorithm.HMAC512(SECRET));
+				.withClaim("id", user.getId()).withClaim("name", user.getName()).sign(Algorithm.HMAC512(SECRET));
 	}
 
 	public static Map<String, Claim> verifyToken(String token) {
 
-		JWTVerifier verifier = JWT.require(Algorithm.HMAC512(SECRET)).build();
-		DecodedJWT jwt = verifier.verify(token);
-
-		return jwt.getClaims();
+		return JWT.require(Algorithm.HMAC512(SECRET)).build().verify(token).getClaims();
 	}
 
 }

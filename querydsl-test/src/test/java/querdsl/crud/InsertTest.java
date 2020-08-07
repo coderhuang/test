@@ -124,7 +124,6 @@ class InsertTest {
 				e1.printStackTrace();
 			}
 
-			applicationEventPublisher.publishEvent(new SaveBookEvent(book));
 			if (TransactionSynchronizationManager.isActualTransactionActive()) {
 
 				TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
@@ -137,6 +136,7 @@ class InsertTest {
 					@Override
 					public void afterCommit() {
 						System.err.println("嗝嗝嗝嗝嗝");
+						applicationEventPublisher.publishEvent(new SaveBookEvent(book));
 					}
 
 				});
