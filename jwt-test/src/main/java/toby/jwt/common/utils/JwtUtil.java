@@ -3,6 +3,7 @@ package toby.jwt.common.utils;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -26,6 +27,7 @@ public class JwtUtil {
 		return JWT.create().withHeader(headerMap).withIssuer("https://account.mysite.com").withAudience("123456")
 				.withIssuedAt(LocalDateTimeUtil.asDate(LocalDateTime.now())).withSubject(user.getCode())
 				.withExpiresAt(LocalDateTimeUtil.asDate(LocalDateTime.now().plusSeconds(expiration))).withJWTId(uuid)
+				.withClaim("nonce", UUID.randomUUID().toString())
 				.withClaim("name", user.getName()).sign(Algorithm.HMAC512(SECRET));
 	}
 
@@ -36,6 +38,7 @@ public class JwtUtil {
 		return JWT.create().withHeader(headerMap).withIssuer("https://account.mysite.com").withAudience("123456")
 				.withIssuedAt(LocalDateTimeUtil.asDate(LocalDateTime.now())).withSubject(refreshUuid)
 				.withExpiresAt(LocalDateTimeUtil.asDate(LocalDateTime.now().plusSeconds(expiration)))
+				.withClaim("nonce", UUID.randomUUID().toString())
 				.sign(Algorithm.HMAC512(SECRET));
 	}
 

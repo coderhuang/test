@@ -43,7 +43,7 @@ public class UserController {
 		}
 		
 		String jwtIdString = (String) BizContext.INSTANCE.getValue(UserBizContextConstant.KEY_JWT_ID.value());
-		if (jwtIdString.equals(userInfoRedisVal.getRight())) {
+		if (!jwtIdString.equals(userInfoRedisVal.getRight())) {
 			
 			response.setStatus(HttpStatus.BAD_REQUEST.value());
 			return "登录态已失效，其他终端已登录";

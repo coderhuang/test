@@ -46,8 +46,8 @@ public class SignOnAndUpController {
 			LocalDateTime now = LocalDateTime.now();
 
 			user.setId(atomL.incrementAndGet());
-			user.setName("啊哈-" + atomI.incrementAndGet());
-			user.setCode(UUID.randomUUID().toString());
+			user.setName("啊哈-" + atomL.get());
+			user.setCode(String.valueOf(atomI.incrementAndGet()));
 			user.setPassword("123456");
 			user.setCreateTime(now);
 			user.setUpdateTime(now);
@@ -58,30 +58,6 @@ public class SignOnAndUpController {
 
 	@Autowired
 	private UserRedisBizHelper userRedisHelper;
-
-//	@PostMapping("/sign-on")
-//	public String signOn(@RequestParam String name, @RequestParam String password, HttpServletResponse response) {
-//
-//		final Pair<User, User> pair = new MutablePair<>();
-//		IN_MEMORY_USERS.entrySet().stream().filter(entry -> {
-//
-//			User user = entry.getValue();
-//			return !(!name.equals(user.getName()) || !password.equals(user.getPassword()));
-//		}).findAny().ifPresent(entry -> pair.setValue(entry.getValue()));
-//
-//		User user = pair.getValue();
-//		if (Objects.isNull(user)) {
-//
-//			response.setStatus(HttpStatus.BAD_REQUEST.value());
-//			return StringUtils.EMPTY;
-//		}
-//
-//		String uuid = UUID.randomUUID().toString();
-//		String key = RedisConfig.REDIS_KEY_PREFIX + uuid;
-//		redisTemplate.opsForValue().set(key, user, 1800, TimeUnit.SECONDS);
-//
-//		return JwtUtil.createToken(uuid, user);
-//	}
 
 	@PostMapping("/sign-on")
 	public ImmutablePair<String, String> signOn(@RequestParam String name, @RequestParam String password,
@@ -146,16 +122,19 @@ public class SignOnAndUpController {
 		}
 
 		// 从业务角度来说,必然存在用户信息
-		var user = IN_MEMORY_USERS.entrySet().stream()
-				.filter(entry -> userCode.equals(entry.getValue().getCode())).findAny().get().getValue();
-		userRedisHelper.delUserInfo(userCode);
-		
+		var user = IN_MEMORY_USERS.entrySet().stream().filter(entry -> userCode.equals(entry.getValue().getCode()))
+				.findAny().get().getValue();
+
 		long userInfoTokenExpiration = DEFAULT_EXPIRATION;
 		// 刷新token的有效期10倍于用户登录态的有效期，降低客户端登录态丢失的几率
 		long refreshTokenExpiration = userInfoTokenExpiration * 10;
 		String refreshUuid = UUID.randomUUID().toString();
 
-		return createSignOnToken(user, userInfoTokenExpiration, refreshUuid, refreshTokenExpiration);
+		ImmutablePair<String, String> tokenPair = createSignOnToken(user, userInfoTokenExpiration, refreshUuid,
+				refreshTokenExpiration);
+		userRedisHelper.delUserInfo(userCode);
+		userRedisHelper.delRefreshTokenBizInfo(uuid);
+		return tokenPair;
 	}
 
 }
