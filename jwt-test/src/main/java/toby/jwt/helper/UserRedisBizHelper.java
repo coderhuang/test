@@ -2,7 +2,9 @@ package toby.jwt.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -57,19 +59,26 @@ public final class UserRedisBizHelper {
 		return KEY_INFO_PREFIX + userCode;
 	}
 
+	public Long signOn(User user, String uuid, long expiration, String refreshTokenUuid, long refreshTokenExpiration) {
+
+		String key = userInfoKey(user.getCode());
+		String refreshTokenKey = refreshTokenBizInfoKey(refreshTokenUuid);
+
+		return redisTemplate.execute(new DefaultRedisScript<Long>(signOnScriptString, Long.class),
+				List.of(key, refreshTokenKey), KEY_TOKEN_BIZ_INFO_KEY, user, KEY_TOKEN_NONCE_KEY, uuid, expiration,
+				user.getCode(), refreshTokenExpiration);
+	}
+
 	public void setUserInfo(User user, String uuid, long expiration) {
 
 		String key = userInfoKey(user.getCode());
 
-//		Map<String, Object> hash = new HashMap<>(4);
-//		hash.put(KEY_TOKEN_BIZ_INFO_KEY, user);
-//		hash.put(KEY_TOKEN_NONCE_KEY, uuid);
-//		// 保证多操作的原子性,可使用lua脚本来实现,目前暂时不实现
-//		redisTemplate.opsForHash().putAll(key, hash);
-//		redisTemplate.expire(key, expiration, TimeUnit.SECONDS);
-
-		redisTemplate.execute(new DefaultRedisScript<Integer>(signOnScriptString, Integer.class), List.of(key),
-				KEY_TOKEN_BIZ_INFO_KEY, user, KEY_TOKEN_NONCE_KEY, uuid, expiration);
+		Map<String, Object> hash = new HashMap<>(4);
+		hash.put(KEY_TOKEN_BIZ_INFO_KEY, user);
+		hash.put(KEY_TOKEN_NONCE_KEY, uuid);
+		// 保证多操作的原子性,可使用lua脚本来实现,目前暂时不实现
+		redisTemplate.opsForHash().putAll(key, hash);
+		redisTemplate.expire(key, expiration, TimeUnit.SECONDS);
 	}
 
 	public ImmutablePair<User, String> getUserInfo(String userCode) {

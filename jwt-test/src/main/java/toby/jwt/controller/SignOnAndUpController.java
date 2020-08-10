@@ -89,8 +89,9 @@ public class SignOnAndUpController {
 			long refreshTokenExpiration) {
 
 		String uuid = UUID.randomUUID().toString();
-		userRedisHelper.setUserInfo(user, uuid, userInfoTokenExpiration);
-		userRedisHelper.setRefreshTokenBizInfo(refreshUuid, user.getCode(), refreshTokenExpiration);
+		userRedisHelper.signOn(user, uuid, userInfoTokenExpiration, refreshUuid, refreshTokenExpiration);
+//		userRedisHelper.setUserInfo(user, uuid, userInfoTokenExpiration);
+//		userRedisHelper.setRefreshTokenBizInfo(refreshUuid, user.getCode(), refreshTokenExpiration);
 
 		String userInfoToken = JwtUtil.createUserInfoToken(user, uuid, userInfoTokenExpiration);
 		String refreshToke = JwtUtil.createUserRefreshToken(refreshUuid, refreshTokenExpiration);
