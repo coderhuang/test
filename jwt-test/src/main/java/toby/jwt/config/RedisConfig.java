@@ -11,8 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class RedisConfig {
-	
-	public static final String REDIS_KEY_PREFIX = "jwt-test:user:";
 
 	@Bean
 	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory,

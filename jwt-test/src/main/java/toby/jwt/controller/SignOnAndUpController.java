@@ -5,28 +5,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.impl.PublicClaims;
+import com.auth0.jwt.interfaces.Claim;
+
+import toby.jwt.common.enums.user.UserHttpConstant;
 import toby.jwt.common.utils.JwtUtil;
-import toby.jwt.config.RedisConfig;
 import toby.jwt.domain.User;
+import toby.jwt.helper.UserRedisBizHelper;
 
 @RestController
 public class SignOnAndUpController {
 
 	static final Random random = new Random(System.currentTimeMillis());
+	static final long DEFAULT_EXPIRATION = 1800;
 
 	static final Map<Long, User> IN_MEMORY_USERS = new HashMap<>();
 	static {
@@ -40,6 +47,7 @@ public class SignOnAndUpController {
 
 			user.setId(atomL.incrementAndGet());
 			user.setName("啊哈-" + atomI.incrementAndGet());
+			user.setCode(UUID.randomUUID().toString());
 			user.setPassword("123456");
 			user.setCreateTime(now);
 			user.setUpdateTime(now);
@@ -49,7 +57,7 @@ public class SignOnAndUpController {
 	}
 
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private UserRedisBizHelper userRedisHelper;
 
 //	@PostMapping("/sign-on")
 //	public String signOn(@RequestParam String name, @RequestParam String password, HttpServletResponse response) {
@@ -74,9 +82,10 @@ public class SignOnAndUpController {
 //
 //		return JwtUtil.createToken(uuid, user);
 //	}
-	
+
 	@PostMapping("/sign-on")
-	public String signOn(@RequestParam String name, @RequestParam String password, HttpServletResponse response) {
+	public ImmutablePair<String, String> signOn(@RequestParam String name, @RequestParam String password,
+			HttpServletResponse response) {
 
 		var optionalEntry = IN_MEMORY_USERS.entrySet().stream().filter(entry -> {
 
@@ -87,14 +96,66 @@ public class SignOnAndUpController {
 		if (!optionalEntry.isPresent()) {
 
 			response.setStatus(HttpStatus.BAD_REQUEST.value());
-			return StringUtils.EMPTY;
+			return null;
 		}
 
-		User user = optionalEntry.get().getValue();
-		String uuid = UUID.randomUUID().toString();
-		String key = RedisConfig.REDIS_KEY_PREFIX + uuid;
-		redisTemplate.opsForValue().set(key, user, 1800, TimeUnit.SECONDS);
+		long userInfoTokenExpiration = DEFAULT_EXPIRATION;
+		// 刷新token的有效期10倍于用户登录态的有效期，降低客户端登录态丢失的几率
+		long refreshTokenExpiration = userInfoTokenExpiration * 10;
 
-		return JwtUtil.createToken(uuid, user);
+		User user = optionalEntry.get().getValue();
+		String refreshUuid = UUID.randomUUID().toString();
+
+		return createSignOnToken(user, userInfoTokenExpiration, refreshUuid, refreshTokenExpiration);
 	}
+
+	private ImmutablePair<String, String> createSignOnToken(User user, long userInfoTokenExpiration, String refreshUuid,
+			long refreshTokenExpiration) {
+
+		String uuid = UUID.randomUUID().toString();
+		userRedisHelper.setUserInfo(user, uuid, userInfoTokenExpiration);
+		userRedisHelper.setRefreshTokenBizInfo(refreshUuid, user.getCode(), refreshTokenExpiration);
+
+		String userInfoToken = JwtUtil.createUserInfoToken(user, uuid, userInfoTokenExpiration);
+		String refreshToke = JwtUtil.createUserRefreshToken(refreshUuid, refreshTokenExpiration);
+
+		return ImmutablePair.of(userInfoToken, refreshToke);
+	}
+
+	@GetMapping("/refresh-user-authority")
+	public ImmutablePair<String, String> refreshUserAuthority(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		final String refreshToken = request.getHeader(UserHttpConstant.REFRESH_TOKEN_PARAMETER_KEY.value());
+		Map<String, Claim> refreshData;
+		try {
+
+			refreshData = JwtUtil.verifyToken(refreshToken);
+		} catch (TokenExpiredException e) {
+
+			response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
+			return ImmutablePair.of("用户登录态刷新令牌已过期", "请重新登录");
+		}
+
+		String uuid = refreshData.get(PublicClaims.SUBJECT).asString();
+		String userCode = userRedisHelper.getRefreshTokenBizInfo(uuid);
+		if (StringUtils.isEmpty(userCode)) {
+
+			response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
+			return ImmutablePair.of("用户登录态刷新令牌已过期", "请重新登录");
+		}
+
+		// 从业务角度来说,必然存在用户信息
+		var user = IN_MEMORY_USERS.entrySet().stream()
+				.filter(entry -> userCode.equals(entry.getValue().getCode())).findAny().get().getValue();
+		userRedisHelper.delUserInfo(userCode);
+		
+		long userInfoTokenExpiration = DEFAULT_EXPIRATION;
+		// 刷新token的有效期10倍于用户登录态的有效期，降低客户端登录态丢失的几率
+		long refreshTokenExpiration = userInfoTokenExpiration * 10;
+		String refreshUuid = UUID.randomUUID().toString();
+
+		return createSignOnToken(user, userInfoTokenExpiration, refreshUuid, refreshTokenExpiration);
+	}
+
 }

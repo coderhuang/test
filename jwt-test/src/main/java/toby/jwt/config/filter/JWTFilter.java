@@ -13,10 +13,13 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.impl.PublicClaims;
 import com.auth0.jwt.interfaces.Claim;
 
 import toby.jwt.common.enums.BizContext;
+import toby.jwt.common.enums.user.UserBizContextConstant;
+import toby.jwt.common.enums.user.UserHttpConstant;
 import toby.jwt.common.utils.JwtUtil;
 
 @WebFilter(filterName = "JWTFilter", urlPatterns = "/*")
@@ -35,9 +38,6 @@ public class JWTFilter implements Filter {
 		final HttpServletResponse response = (HttpServletResponse) res;
 
 		response.setCharacterEncoding("UTF-8");
-		// 获取 header里的token
-		final String token = request.getHeader("authorization");
-
 		if ("OPTIONS".equals(request.getMethod())) {
 
 			response.setStatus(HttpServletResponse.SC_OK);
@@ -45,6 +45,8 @@ public class JWTFilter implements Filter {
 			return;
 		}
 		// Except OPTIONS, other request should be checked by JWT
+		// 获取 header里的token
+		final String token = request.getHeader(UserHttpConstant.AUTHORITY_TOKEN_HEADER_KEY.value());
 
 		if (token == null) {
 
@@ -53,20 +55,30 @@ public class JWTFilter implements Filter {
 			return;
 		}
 
-		Map<String, Claim> userData = JwtUtil.verifyToken(token);
+		Map<String, Claim> userData;
+		try {
+
+			userData = JwtUtil.verifyToken(token);
+		} catch (TokenExpiredException e) {
+
+			response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
+			response.getWriter().write("用户登录态已过期");
+			return;
+		}
+
 		if (userData == null) {
 
 			response.getWriter().write("token不合法！");
 			return;
 		}
 
-		Integer id = userData.get("id").asInt();
 		String name = userData.get("name").asString();
 		String redisKeyUserSuffix = userData.get(PublicClaims.SUBJECT).asString();
+		String jwtId = userData.get(PublicClaims.JWT_ID).asString();
 
-		BizContext.INSTANCE.setValue("id", id);
-		BizContext.INSTANCE.setValue("name", name);
-		BizContext.INSTANCE.setValue("redisKeyUserSuffix", redisKeyUserSuffix);
+		BizContext.INSTANCE.setValue(UserBizContextConstant.KEY_NAME.value(), name);
+		BizContext.INSTANCE.setValue(UserBizContextConstant.KEY_REDIS_USER_SUFFIX.value(), redisKeyUserSuffix);
+		BizContext.INSTANCE.setValue(UserBizContextConstant.KEY_JWT_ID.value(), jwtId);
 
 		chain.doFilter(req, res);
 
