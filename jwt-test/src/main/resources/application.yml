@@ -26,12 +26,12 @@ spring:
       connection-test-query: SELECT 1
       auto-commit: true
   redis:
-      database: 3
+      database: 8
       host: 192.168.21.141
       port: 6379
       password: 
       timeout: 1000
-      Lettuce:
+      jedis:
         pool:
           max-active: 8
           max-wait: -1
