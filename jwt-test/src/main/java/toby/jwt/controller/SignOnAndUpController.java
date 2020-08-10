@@ -130,9 +130,9 @@ public class SignOnAndUpController {
 		long refreshTokenExpiration = userInfoTokenExpiration * 10;
 		String refreshUuid = UUID.randomUUID().toString();
 
+		userRedisHelper.delUserInfo(userCode);
 		ImmutablePair<String, String> tokenPair = createSignOnToken(user, userInfoTokenExpiration, refreshUuid,
 				refreshTokenExpiration);
-		userRedisHelper.delUserInfo(userCode);
 		userRedisHelper.delRefreshTokenBizInfo(uuid);
 		return tokenPair;
 	}

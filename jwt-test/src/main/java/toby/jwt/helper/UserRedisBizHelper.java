@@ -1,5 +1,6 @@
 package toby.jwt.helper;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +35,9 @@ public final class UserRedisBizHelper {
 	public static final String KEY_TOKEN_NONCE_KEY = "token_nonce";
 
 	public static final String KEY_TOKEN_SUBJECT_MAP_KEY = "token_subject";
+
+	public final ResourceScriptSource signOnScript = new ResourceScriptSource(
+			new ClassPathResource("templates" + File.separator + "lua" + File.separator + "signon.template"));
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
