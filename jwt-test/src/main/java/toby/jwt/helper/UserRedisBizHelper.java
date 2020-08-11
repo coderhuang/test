@@ -63,7 +63,7 @@ public final class UserRedisBizHelper {
 
 		String key = userInfoKey(user.getCode());
 		String refreshTokenKey = refreshTokenBizInfoKey(refreshTokenUuid);
-
+		// 目前这个脚本是假设是在sentinel的情况下执行。如果是cluster的话可以是使用hashtags的方案避免多node操作，不过无法避免rehash或者reshard时的问题
 		return redisTemplate.execute(new DefaultRedisScript<Long>(signOnScriptString, Long.class),
 				List.of(key, refreshTokenKey), KEY_TOKEN_BIZ_INFO_KEY, user, KEY_TOKEN_NONCE_KEY, uuid, expiration,
 				user.getCode(), refreshTokenExpiration);
