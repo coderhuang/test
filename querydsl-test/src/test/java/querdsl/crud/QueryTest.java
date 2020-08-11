@@ -32,6 +32,7 @@ import toby.querydsl.common.utils.id.SnowFlakeGenerator;
 import toby.querydsl.domain.entity.Book;
 import toby.querydsl.domain.qobj.QBook;
 import toby.querydsl.domain.qobj.QSkuProperty;
+import toby.querydsl.event.BookQueryEvent;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = { Application.class })
@@ -56,7 +57,6 @@ class QueryTest {
 
 	@Test
 	@DisplayName("queryDsl查询测试")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testQueryAndOrdering() {
 
@@ -64,11 +64,12 @@ class QueryTest {
 		var books = sqlQuery.where(qBook.name.eq("《江城》")).fetch();
 		assertNotNull(books);
 		books.forEach(System.err::println);
+		
+		applicationEventPublisher.publishEvent(new BookQueryEvent(sqlQuery));
 	}
 
 	@Test
 	@DisplayName("queryDsl条件查询测试")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testWhereCondition() {
 
@@ -83,7 +84,6 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试联表查询")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testQueryJoin() {
 
@@ -110,7 +110,6 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试flag_bit的位操作查询")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testQueryOrder() {
 
@@ -128,7 +127,6 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试groupBy的查询")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testQueryGroupingBy() {
 
@@ -143,7 +141,6 @@ class QueryTest {
 
 	@Test
 	@DisplayName("测试子查询")
-	@Transactional(rollbackFor = Exception.class)
 	@Rollback(false)
 	void testSubQuery() {
 
