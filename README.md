@@ -8,6 +8,12 @@
 针对kafka的一些测试
 >>>>>>>>>>>与君分享
 
+## oidc-test
+针对spring security的oauth2的支持做一个简单测试
+
+## jwt-test
+使用java-jwt来做用户登录和注册的简单业务场景验证，所以不是核心部分的场景代码不做精细的实现
+
 ```
 function fun(){
   echo "这是牛逼的代码";
