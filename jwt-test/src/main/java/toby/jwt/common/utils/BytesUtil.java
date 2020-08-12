@@ -48,7 +48,7 @@ public final class BytesUtil {
 	}
 
 	/**
-	 * 程序语言按照大端处理，实际存储的字节序虚拟机会做适配
+	 * 程序语言按照大端字节序处理，实际存储的字节序虚拟机会做适配
 	 * @param i
 	 * @return
 	 */
@@ -59,7 +59,7 @@ public final class BytesUtil {
 	}
 
 	/**
-	 * 程序语言按照大端处理，实际存储的字节序虚拟机会做适配
+	 * 程序语言按照大端字节序处理，实际存储的字节序虚拟机会做适配
 	 * @param bytes
 	 * @return
 	 */
