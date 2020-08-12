@@ -47,12 +47,22 @@ public final class BytesUtil {
 		return returnI;
 	}
 
+	/**
+	 * 程序语言按照大端处理，实际存储的字节序虚拟机会做适配
+	 * @param i
+	 * @return
+	 */
 	public static byte[] intConvert2Bytes1(int i) {
 
 		ByteBuffer bb = ByteBuffer.allocate(Integer.BYTES).putInt(i);
 		return bb.array();
 	}
 
+	/**
+	 * 程序语言按照大端处理，实际存储的字节序虚拟机会做适配
+	 * @param bytes
+	 * @return
+	 */
 	public static int bytesConvert2Int1(byte[] bytes) {
 
 		ByteBuffer bb = ByteBuffer.wrap(bytes);
