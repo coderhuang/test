@@ -83,7 +83,6 @@ public class JWTFilter implements Filter {
 		chain.doFilter(req, res);
 
 		BizContext.INSTANCE.clear();
-
 	}
 
 }
