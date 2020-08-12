@@ -1,5 +1,6 @@
 package toby.jwt.common.utils;
 
+import java.nio.ByteBuffer;
 import java.util.Base64;
 
 public final class BytesUtil {
@@ -7,8 +8,48 @@ public final class BytesUtil {
 	private BytesUtil() {
 	}
 
+	public static byte[] intConvert2Bytes(int i) {
+
+		int intByteLength = Integer.BYTES;
+		int byteSize = Byte.SIZE;
+		byte[] bytes = new byte[intByteLength];
+		for (int tempI = intByteLength; tempI > 0; tempI--) {
+
+			int rightShiftBits = (intByteLength - tempI) * byteSize;
+			bytes[tempI - 1] = (byte) (0xFF & (i >>> rightShiftBits));
+		}
+
+		return bytes;
+	}
+
+	public static int bytesConvert2Int(byte[] bytes) {
+
+		int intByteLength = Integer.BYTES;
+		int byteSize = Byte.SIZE;
+		int returnI = 0;
+		for (int i = intByteLength - 1; i >= 0; i--) {
+
+			int leftShiftSize = i * byteSize;
+			returnI |= bytes[i] << leftShiftSize;
+		}
+
+		return returnI;
+	}
+
+	public static byte[] intConvert2Bytes1(int i) {
+
+		ByteBuffer bb = ByteBuffer.allocate(Integer.BYTES).putInt(i);
+		return bb.array();
+	}
+
+	public static int bytesConvert2Int1(byte[] bytes) {
+
+		ByteBuffer bb = ByteBuffer.wrap(bytes);
+		return bb.getInt();
+	}
+
 	public static byte[] base64String2Bytes(String base64String) {
-		
+
 		return Base64.getUrlDecoder().decode(hexStringToBytes(base64String));
 	}
 
