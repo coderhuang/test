@@ -8,6 +8,12 @@ public final class BytesUtil {
 	private BytesUtil() {
 	}
 
+	/**
+	 * 按照大端字节序处理
+	 * 
+	 * @param i
+	 * @return
+	 */
 	public static byte[] intConvert2Bytes(int i) {
 
 		int intByteLength = Integer.BYTES;
@@ -22,14 +28,19 @@ public final class BytesUtil {
 		return bytes;
 	}
 
+	/**
+	 * 按照大端字节序处理
+	 * 
+	 * @param bytes
+	 * @return
+	 */
 	public static int bytesConvert2Int(byte[] bytes) {
 
-		int intByteLength = Integer.BYTES;
 		int byteSize = Byte.SIZE;
 		int returnI = 0;
-		for (int i = intByteLength - 1; i >= 0; i--) {
+		for (int i = 0; i < bytes.length; i++) {
 
-			int leftShiftSize = i * byteSize;
+			int leftShiftSize = bytes.length - 1 - i * byteSize;
 			returnI |= bytes[i] << leftShiftSize;
 		}
 
