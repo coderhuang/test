@@ -102,11 +102,10 @@ public final class BytesUtil {
 		hexString = hexString.toLowerCase();
 
 		byte[] bytes = new byte[hexString.length() >> 1];
-		for (int i = 0, j = 0; i < hexString.length() && j < bytes.length; i++, j++) {
+		for (int i = 0, j = 0; i < hexString.length() && j < bytes.length; j++) {
 
-			String s = hexString.substring(i, i + 2);
-			int higherBitsVal = (0x0F & valueString.indexOf(s.charAt(0))) << 4;
-			int lowerBitsVal = (0x0F & valueString.indexOf(s.charAt(1)));
+			int higherBitsVal = (0x0F & valueString.indexOf(hexString.charAt(i++))) << 4;
+			int lowerBitsVal = (0x0F & valueString.indexOf(hexString.charAt(i++)));
 			byte b = (byte) (higherBitsVal | lowerBitsVal);
 			bytes[j] = b;
 		}
