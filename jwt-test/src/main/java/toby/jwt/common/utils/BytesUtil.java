@@ -49,6 +49,7 @@ public final class BytesUtil {
 
 	/**
 	 * 程序语言按照大端字节序处理，实际存储的字节序类库的代码会做适配
+	 * 
 	 * @param i
 	 * @return
 	 */
@@ -60,6 +61,7 @@ public final class BytesUtil {
 
 	/**
 	 * 程序语言按照大端字节序处理，实际存储的字节序类库的代码会做适配
+	 * 
 	 * @param bytes
 	 * @return
 	 */
@@ -106,8 +108,7 @@ public final class BytesUtil {
 
 			int higherBitsVal = (0x0F & valueString.indexOf(hexString.charAt(i++))) << 4;
 			int lowerBitsVal = (0x0F & valueString.indexOf(hexString.charAt(i++)));
-			byte b = (byte) (higherBitsVal | lowerBitsVal);
-			bytes[j] = b;
+			bytes[j] = (byte) (higherBitsVal | lowerBitsVal);
 		}
 
 		return bytes;
