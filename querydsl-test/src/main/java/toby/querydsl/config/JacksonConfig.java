@@ -24,6 +24,8 @@ public class JacksonConfig {
 				.serializerByType(Long.class, ToStringSerializer.instance)
 				.serializerByType(Long.TYPE, ToStringSerializer.instance)
 				.featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+//				.featuresToEnable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+//				.featuresToEnable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
 				.featuresToDisable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).modules(new JavaTimeModule());
 	}
 

@@ -1,6 +1,6 @@
 package toby.querydsl.common.constants;
 
-public class BizContextConstant {
+public final class BizContextConstant {
 
 	private BizContextConstant() {
 	}
