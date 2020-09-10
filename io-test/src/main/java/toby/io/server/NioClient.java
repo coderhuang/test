@@ -24,8 +24,8 @@ public class NioClient {
 		try {
 
 			SocketChannel sc = SocketChannel.open();
-			sc.socket().connect(new InetSocketAddress(host, port));
 			sc.configureBlocking(false);
+			sc.connect(new InetSocketAddress(host, port));
 			sc.register(selector, SelectionKey.OP_CONNECT);
 			while (!sendAndReadIsDone) {
 
