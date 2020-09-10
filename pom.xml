@@ -13,6 +13,7 @@
 		<module>test-base</module>
 		<module>oidc-test</module>
 		<module>jwt-test</module>
+		<module>io-test</module>
 	</modules>
 
 	<properties>
