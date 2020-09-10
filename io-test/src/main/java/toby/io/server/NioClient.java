@@ -27,6 +27,7 @@ public class NioClient {
 			sc.configureBlocking(false);
 			sc.connect(new InetSocketAddress(host, port));
 			sc.register(selector, SelectionKey.OP_CONNECT);
+			System.err.println("1->client try connect");
 			while (!sendAndReadIsDone) {
 
 				if (selector.select(3) < 1) {
@@ -70,7 +71,7 @@ public class NioClient {
 		SocketChannel clientChannel = ((SocketChannel) sk.channel());
 		clientChannel.finishConnect();
 		clientChannel.register(selector, SelectionKey.OP_WRITE);
-		System.err.println("client connected");
+		System.err.println("3->client connected");
 	}
 
 	private void read(SelectionKey sk) throws IOException {
@@ -91,14 +92,14 @@ public class NioClient {
 		System.err.println(readString);
 		clientChannel.close();
 		sendAndReadIsDone = true;
-		System.err.println("client readed");
+		System.err.println("9->client readed");
 	}
 
 	private void write(SelectionKey sk) throws IOException {
 
 		SocketChannel clientChannel = ((SocketChannel) sk.channel());
 		this.writeBuffer.clear();
-		this.writeBuffer.put("client is in aha!".getBytes(StandardCharsets.UTF_8));
+		this.writeBuffer.put("4->client is in aha!".getBytes(StandardCharsets.UTF_8));
 		this.writeBuffer.flip();
 		try {
 			clientChannel.write(writeBuffer);
@@ -108,6 +109,6 @@ public class NioClient {
 			clientChannel.close();
 		}
 		clientChannel.register(selector, SelectionKey.OP_READ);
-		System.err.println("client writed");
+		System.err.println("5->client writed");
 	}
 }

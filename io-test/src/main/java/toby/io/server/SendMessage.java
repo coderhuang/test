@@ -29,6 +29,6 @@ public class SendMessage {
 
 		thread1.join();
 		thread2.join();
-		System.err.println("all is done!");
+		System.err.println("10->all is done!");
 	}
 }

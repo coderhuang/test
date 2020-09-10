@@ -70,7 +70,7 @@ public class NioServer {
 		SocketChannel clientChannel = ((ServerSocketChannel) sk.channel()).accept();
 		clientChannel.configureBlocking(false);
 		clientChannel.register(selector, SelectionKey.OP_READ);
-		System.err.println("server accepted");
+		System.err.println("2->server accepted");
 	}
 
 	private void read(SelectionKey sk) throws IOException {
@@ -90,14 +90,14 @@ public class NioServer {
 		String readString = new String(readBuffer.array(), 0, readCount);
 		System.err.println(readString);
 		clientChannel.register(selector, SelectionKey.OP_WRITE);
-		System.err.println("server readed");
+		System.err.println("6->server readed");
 	}
 
 	private void write(SelectionKey sk) throws IOException {
 
 		SocketChannel clientChannel = ((SocketChannel) sk.channel());
 		this.writeBuffer.clear();
-		this.writeBuffer.put("server is done!".getBytes(StandardCharsets.UTF_8));
+		this.writeBuffer.put("7->server is done!".getBytes(StandardCharsets.UTF_8));
 		this.writeBuffer.flip();
 		try {
 			clientChannel.write(writeBuffer);
@@ -108,6 +108,6 @@ public class NioServer {
 			clientChannel.close();
 			readAndSendIsDone = true;
 		}
-		System.err.println("server writed");
+		System.err.println("8->server writed");
 	}
 }
