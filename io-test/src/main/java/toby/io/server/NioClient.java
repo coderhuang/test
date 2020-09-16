@@ -8,7 +8,6 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
-import java.util.Set;
 
 public class NioClient {
 

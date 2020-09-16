@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Component
 public final class VerfiyRedisBizHelper {
 
@@ -20,9 +18,6 @@ public final class VerfiyRedisBizHelper {
 
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-
-	@Autowired
-	private ObjectMapper objectMapper;
 
 	public String mobileSignupVerifyImageKey(String userCode) {
 
