@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class NioClient {
 
-	private static Selector selector;
+	private Selector selector;
 	private ByteBuffer readBuffer = ByteBuffer.allocate(1024);
 	private ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
 
@@ -34,9 +34,7 @@ public class NioClient {
 					continue;
 				}
 
-				Set<SelectionKey> selectedKeys = selector.selectedKeys();
-				Iterator<SelectionKey> itr = selectedKeys.iterator();
-				processSelectedKey(itr);
+				processSelectedKey(selector.selectedKeys().iterator());
 			}
 
 		} catch (IOException e) {

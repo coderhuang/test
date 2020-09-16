@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class NioServer {
 
-	private static Selector selector;
+	private Selector selector;
 	private ByteBuffer readBuffer = ByteBuffer.allocate(1024);
 	private ByteBuffer writeBuffer = ByteBuffer.allocate(1024);
 	private boolean readAndSendIsDone = false;
