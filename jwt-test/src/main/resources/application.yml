@@ -29,7 +29,7 @@ spring:
       database: 8
       host: 192.168.21.141
       port: 6379
-      password: 
+#      password: 
       timeout: 1000
       Lettuce:
         pool:

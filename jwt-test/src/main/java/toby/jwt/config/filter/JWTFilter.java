@@ -14,7 +14,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -32,12 +32,12 @@ public class JWTFilter implements Filter {
 
 	private UserRedisBizHelper userRedisBizHelper;
 
-	private AnnotationConfigWebApplicationContext wac;
+	private AnnotationConfigServletWebServerApplicationContext wac;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		ServletContext servletContext = filterConfig.getServletContext();
-		wac = (AnnotationConfigWebApplicationContext) WebApplicationContextUtils
+		wac = (AnnotationConfigServletWebServerApplicationContext) WebApplicationContextUtils
 				.getWebApplicationContext(servletContext);
 		if (wac != null && userRedisBizHelper == null)
 			userRedisBizHelper = wac.getBean(UserRedisBizHelper.class);
