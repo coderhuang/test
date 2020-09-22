@@ -6,12 +6,17 @@ import java.util.Map;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.impl.PublicClaims;
@@ -21,12 +26,22 @@ import toby.jwt.common.enums.BizContext;
 import toby.jwt.common.enums.user.UserBizContextConstant;
 import toby.jwt.common.enums.user.UserHttpConstant;
 import toby.jwt.common.utils.JwtUtil;
+import toby.jwt.helper.UserRedisBizHelper;
 
 @WebFilter(filterName = "JWTFilter", urlPatterns = "/*")
 public class JWTFilter implements Filter {
 
+	private UserRedisBizHelper userRedisBizHelper;
+
+	private AnnotationConfigWebApplicationContext wac;
+
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
+		ServletContext servletContext = filterConfig.getServletContext();
+		wac = (AnnotationConfigWebApplicationContext) WebApplicationContextUtils
+				.getWebApplicationContext(servletContext);
+		if (wac != null && userRedisBizHelper == null)
+			userRedisBizHelper = wac.getBean(UserRedisBizHelper.class);
 	}
 
 	@Override
