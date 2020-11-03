@@ -1,4 +1,4 @@
-package toby.io.server;
+package toby.io.nio;
 
 public class SendMessage {
 
