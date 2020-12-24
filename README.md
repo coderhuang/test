@@ -17,7 +17,7 @@
 
 ```
 function fun(){
-  echo "这是牛逼的代码";
+  echo "啊啊啊啊啊啊";
 }
 fun();
 
