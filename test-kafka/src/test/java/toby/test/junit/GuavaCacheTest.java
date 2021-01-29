@@ -17,7 +17,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
-class GuavaTest {
+class GuavaCacheTest {
 
 	static Cache<String, String> cacher;
 
@@ -123,7 +123,7 @@ class GuavaTest {
 		LoadingCache<String, String> testLoaderCacher = CacheBuilder.newBuilder()
 				.expireAfterWrite(Duration.ofSeconds(2))// 缓存6小时后失效
 				.maximumSize(100)// 设置缓存的最大容量
-				.concurrencyLevel(2)// 设置并发级别为10
+				.concurrencyLevel(2)// 设置并发级别为2
 				.recordStats() // 开启缓存统计
 				.build(new CacheLoader<String, String>() {
 					@Override
