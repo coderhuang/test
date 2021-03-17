@@ -9,6 +9,13 @@
 	</parent>
 	<artifactId>oidc-test</artifactId>
 
+	<properties>
+
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+
+	</properties>
 
 	<dependencies>
 		<dependency>
