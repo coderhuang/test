@@ -16,7 +16,7 @@
 		<lombok.version>1.18.4</lombok.version>
 		<validation-api.version>2.0.1.Final</validation-api.version>
 		<java-jwt.version>3.10.3</java-jwt.version>
-		<xxl-job-core.version>2.1.0</xxl-job-core.version>
+		<xxl-job-core.version>2.3.0</xxl-job-core.version>
 		<org.mapstruct.version>1.3.0.Final</org.mapstruct.version>
 		<!-- mapStruct增加对eclipse的支持 -->
 		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
